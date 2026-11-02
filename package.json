@@ -13,12 +13,13 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "npm run dev -w client",
+    "dev": "concurrently --kill-others-on-fail --names client,server --prefix-colors cyan,magenta \"npm run dev -w client\" \"npm run dev -w server\"",
     "build": "npm run build -w client",
     "lint": "eslint ."
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "concurrently": "^10.0.6",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
