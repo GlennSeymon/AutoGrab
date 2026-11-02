@@ -18,7 +18,6 @@ These depend on each other: a database makes it possible to manage the vehicle d
 - **Structured logbook entries.** Parse the logbook into dated service entries and show them as a table instead of raw text.
 - **Better upload experience.** Drag-and-drop, a progress bar for slow connections, and a preview of the file before submitting.
 - **Searchable dropdowns.** An autocomplete for Make and Model once the vehicle list grows beyond a handful of entries.
-- **System, light and dark themes.** A System / Light / Dark switcher in the header. MUI's `colorSchemes` option enables both schemes and defaults to the OS setting, and `useColorScheme` switches between them, remembers the choice in localStorage and keeps open tabs in sync. Components already take their colours from the theme, so no styling needs rewriting. The contrast check in the accessibility pass would need to cover both schemes.
 - **Accessibility pass.** A keyboard-only run through the whole flow, a screen-reader check of labels, errors, the submitting state and the result page, and a colour-contrast check against WCAG AA. MUI's components already give a reasonable baseline (labelled inputs, errors shown in an `Alert` with `role="alert"`), but this hasn't been audited.
 
 ## Production readiness

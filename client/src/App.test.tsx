@@ -28,6 +28,7 @@ describe('App routes', () => {
 		expect(
 			screen.getByRole('heading', { name: 'Select a vehicle' }),
 		).toBeInTheDocument();
+		expect(screen.getByRole('img', { name: 'AutoGrab' })).toBeInTheDocument();
 	});
 
 	it('renders the result page at /upload', () => {
@@ -36,6 +37,7 @@ describe('App routes', () => {
 		expect(
 			screen.getByRole('heading', { name: 'Upload result' }),
 		).toBeInTheDocument();
+		expect(screen.getByRole('img', { name: 'AutoGrab' })).toBeInTheDocument();
 	});
 
 	it('redirects unknown URLs to the form page', () => {

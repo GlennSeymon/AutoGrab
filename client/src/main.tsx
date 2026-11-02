@@ -1,16 +1,15 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router';
 import App from './App.tsx';
-
-const theme = createTheme();
+import theme from './theme.ts';
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
+		<ThemeProvider theme={theme} noSsr>
+			<CssBaseline enableColorScheme />
 			<BrowserRouter>
 				<App />
 			</BrowserRouter>
