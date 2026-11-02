@@ -32,12 +32,13 @@ function SelectField<TFieldValues extends FieldValues, TTransformedValues>({
 		<Controller
 			control={control}
 			name={name}
-			render={({ field, fieldState }) => (
+			render={({ field: { ref, ...field }, fieldState }) => (
 				<TextField
 					select
 					fullWidth
 					label={label}
 					{...field}
+					inputRef={ref}
 					disabled={disabled}
 					value={field.value ?? ''}
 					onChange={(event) =>

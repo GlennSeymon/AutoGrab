@@ -1,6 +1,8 @@
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import type { FormEvent } from 'react';
 import { uploadVehicle } from '../api/uploadVehicle.ts';
 import LogbookInput from '../components/LogbookInput.tsx';
 import QuickSelectButtons from '../components/QuickSelectButtons.tsx';
@@ -23,11 +25,26 @@ function FormPage() {
 		clear,
 		removeLogbook,
 	} = useVehicleForm();
-	const { isSubmitting } = form.formState;
+	const { isSubmitting, errors } = form.formState;
 
-	const onSubmit = form.handleSubmit(async (values) => {
-		await uploadVehicle(values);
+	const submit = form.handleSubmit(async (values) => {
+		const result = await uploadVehicle(values);
+		if (result.ok) {
+			return;
+		}
+		const { message, field } = result.error;
+		if (field) {
+			form.setError(field, { type: 'server', message });
+			form.setFocus(field);
+		} else {
+			form.setError('root.server', { type: 'server', message });
+		}
 	});
+
+	function onSubmit(event: FormEvent<HTMLFormElement>) {
+		form.clearErrors('root.server');
+		return submit(event);
+	}
 
 	return (
 		<Stack component="form" spacing={3} noValidate onSubmit={onSubmit}>
@@ -76,6 +93,9 @@ function FormPage() {
 					onRemove={removeLogbook}
 					disabled={isSubmitting}
 				/>
+			)}
+			{errors.root?.server && (
+				<Alert severity="error">{errors.root.server.message}</Alert>
 			)}
 			<Stack direction="row" spacing={2}>
 				{isSelectionComplete && (

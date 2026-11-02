@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent, {
 	PointerEventsCheckLevel,
 } from '@testing-library/user-event';
@@ -20,6 +20,7 @@ async function choose(label: string, option: string) {
 }
 
 beforeEach(() => {
+	vi.mocked(uploadVehicle).mockReset();
 	user = userEvent.setup();
 	render(<FormPage />);
 });
@@ -229,5 +230,58 @@ describe('FormPage submitting', () => {
 				badge: 'Performance',
 			}),
 		);
+	});
+});
+
+describe('FormPage submit errors', () => {
+	const SERVER_DOWN_MESSAGE = "Can't reach the server";
+	const LOGBOOK = new File(['2020/05/01: Initial Service'], 'logbook.txt', {
+		type: 'text/plain',
+	});
+
+	async function fillAndSubmit() {
+		await user.click(
+			screen.getByRole('button', { name: 'Tesla Model 3 Performance' }),
+		);
+		await user.upload(screen.getByLabelText('Attach logbook'), LOGBOOK);
+		await user.click(screen.getByRole('button', { name: 'Submit' }));
+	}
+
+	function expectSelectionKept() {
+		expect(field('Make')).toHaveTextContent('Tesla');
+		expect(field('Model')).toHaveTextContent('Model 3');
+		expect(field('Badge')).toHaveTextContent('Performance');
+		expect(screen.getByText('logbook.txt')).toBeInTheDocument();
+	}
+
+	it('shows an API field error on its field and focuses it', async () => {
+		vi.mocked(uploadVehicle).mockResolvedValue({
+			ok: false,
+			error: { message: 'Select a valid badge', field: 'badge' },
+		});
+
+		await fillAndSubmit();
+
+		expect(field('Badge')).toHaveAccessibleDescription('Select a valid badge');
+		await waitFor(() => expect(field('Badge')).toHaveFocus());
+		expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+		expectSelectionKept();
+	});
+
+	it('shows other errors in an alert and clears it on the next submit', async () => {
+		vi.mocked(uploadVehicle).mockResolvedValueOnce({
+			ok: false,
+			error: { message: SERVER_DOWN_MESSAGE },
+		});
+
+		await fillAndSubmit();
+
+		expect(screen.getByRole('alert')).toHaveTextContent(SERVER_DOWN_MESSAGE);
+		expectSelectionKept();
+
+		vi.mocked(uploadVehicle).mockReturnValue(new Promise(() => {}));
+		await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+		expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 	});
 });
