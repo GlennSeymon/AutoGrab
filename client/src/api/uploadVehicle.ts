@@ -1,6 +1,7 @@
 import {
 	type ApiError,
 	apiErrorSchema,
+	HttpStatus,
 	LOGBOOK_FIELD,
 	UPLOAD_PATH,
 	type UploadResponse,
@@ -22,6 +23,12 @@ export const NETWORK_ERROR_MESSAGE =
 	"Can't reach the server. Check your connection and try again.";
 export const UNEXPECTED_RESPONSE_MESSAGE =
 	'Unexpected response from the server. Please try again.';
+
+const GATEWAY_ERROR_STATUSES = new Set<number>([
+	HttpStatus.BAD_GATEWAY,
+	HttpStatus.SERVICE_UNAVAILABLE,
+	HttpStatus.GATEWAY_TIMEOUT,
+]);
 
 function failure(message: string): UploadVehicleResult {
 	return { ok: false, error: { message } };
@@ -52,8 +59,11 @@ export async function uploadVehicle(
 			return failure(NETWORK_ERROR_MESSAGE);
 		}
 		const result = apiErrorSchema.safeParse(error.response.data);
-		return result.success
-			? { ok: false, error: result.data.error }
+		if (result.success) {
+			return { ok: false, error: result.data.error };
+		}
+		return GATEWAY_ERROR_STATUSES.has(error.response.status)
+			? failure(NETWORK_ERROR_MESSAGE)
 			: failure(UNEXPECTED_RESPONSE_MESSAGE);
 	}
 }

@@ -59,6 +59,15 @@ describe('uploadVehicle', () => {
 		});
 	});
 
+	it('returns a network error when a proxy cannot reach the server', async () => {
+		mock.onPost(UPLOAD_PATH).reply(HttpStatus.BAD_GATEWAY, '');
+
+		expect(await uploadVehicle(selection)).toEqual({
+			ok: false,
+			error: { message: NETWORK_ERROR_MESSAGE },
+		});
+	});
+
 	it('returns an unexpected response error for a non-JSON reply', async () => {
 		mock
 			.onPost(UPLOAD_PATH)
