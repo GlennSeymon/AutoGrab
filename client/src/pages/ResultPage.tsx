@@ -1,8 +1,9 @@
 import { formatMake, uploadResponseSchema } from '@autograb/shared';
+import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { useLocation } from 'react-router';
+import { Link as RouterLink, useLocation } from 'react-router';
 
 const VehicleDetails = styled('dl')(({ theme }) => ({
 	display: 'grid',
@@ -58,7 +59,12 @@ function ResultPage() {
 					)}
 				</>
 			) : (
-				<Typography>Nothing has been submitted yet</Typography>
+				<Typography>
+					Nothing has been submitted yet.{' '}
+					<Link component={RouterLink} to="/">
+						Select a vehicle
+					</Link>
+				</Typography>
 			)}
 		</Stack>
 	);

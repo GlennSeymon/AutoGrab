@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import ResultPage from './ResultPage.tsx';
 
-const EMPTY_MESSAGE = 'Nothing has been submitted yet';
+const EMPTY_MESSAGE = /Nothing has been submitted yet/;
 
 const response: UploadResponse = {
 	make: 'ford',
@@ -33,6 +33,14 @@ describe('ResultPage state', () => {
 		renderWithState();
 
 		expect(screen.getByText(EMPTY_MESSAGE)).toBeInTheDocument();
+	});
+
+	it('links back to the form from the empty state', () => {
+		renderWithState();
+
+		expect(
+			screen.getByRole('link', { name: 'Select a vehicle' }),
+		).toHaveAttribute('href', '/');
 	});
 
 	it('treats invalid state the same as missing state', () => {
