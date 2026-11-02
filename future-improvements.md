@@ -18,6 +18,7 @@ These depend on each other: a database makes it possible to manage the vehicle d
 - **Structured logbook entries.** Parse the logbook into dated service entries and show them as a table instead of raw text.
 - **Better upload experience.** Drag-and-drop, a progress bar for slow connections, and a preview of the file before submitting.
 - **Searchable dropdowns.** An autocomplete for Make and Model once the vehicle list grows beyond a handful of entries.
+- **System, light and dark themes.** A System / Light / Dark switcher in the header. MUI's `colorSchemes` option enables both schemes and defaults to the OS setting, and `useColorScheme` switches between them, remembers the choice in localStorage and keeps open tabs in sync. Components already take their colours from the theme, so no styling needs rewriting. The contrast check in the accessibility pass would need to cover both schemes.
 - **Accessibility pass.** A keyboard-only run through the whole flow, a screen-reader check of labels, errors, the submitting state and the result page, and a colour-contrast check against WCAG AA. MUI's components already give a reasonable baseline (labelled inputs, errors shown in an `Alert` with `role="alert"`), but this hasn't been audited.
 
 ## Production readiness
@@ -26,7 +27,8 @@ These depend on each other: a database makes it possible to manage the vehicle d
 - **Docker.** A Dockerfile and Compose file, so the app (and later the database) runs without a local Node install.
 - **CI pipeline.** A GitHub Actions workflow that runs lint, tests and build on every push and pull request.
 - **Security hardening.** `helmet` security headers, rate limiting on `POST /api/upload`, and an explicit CORS policy if the client is ever served from another origin.
-- **Structured logging and monitoring.** Replace `console.error` in the error handler with a structured logger (e.g. pino) that tags each log with a request ID, and send errors to a monitoring service.
+- **Structured logging.** Replace `console.error` in the error handler with a structured logger (e.g. pino) that tags each log with a request ID.
+- **Error logging to Sentry.** On the server, `@sentry/node` is initialised in an `instrument.ts` loaded before the app, and `Sentry.setupExpressErrorHandler(app)` reports unexpected (500) errors before the existing error middleware turns them into `ApiError` JSON. On the client, `@sentry/react` captures render errors and failed requests, with source maps uploaded at build time. The request ID links a Sentry event to the server logs.
 
 ## Testing
 
