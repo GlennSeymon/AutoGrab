@@ -61,7 +61,7 @@ shared/   Vehicle data (vehicles.json), Zod schemas, types and helpers used by b
 samples/  Sample logbook file
 ```
 
-The vehicle data lives once, in `shared/`, and is imported by both the client (to build the dropdowns) and the server (to validate submissions).
+The vehicle data lives once, in `shared/`, and is imported by both the client (to build the dropdowns) and the server (to validate submissions). Everything in `shared/` is exported from `shared/src/index.ts`, so both import from the one path, `@autograb/shared`.
 
 ## Project documents
 

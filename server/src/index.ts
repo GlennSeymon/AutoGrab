@@ -1,18 +1,9 @@
-import express, { type Request, type Response } from 'express';
+import { createApp } from './app.ts';
+import { parseEnv } from './env.ts';
 
-const PORT = 3001;
+const { PORT } = parseEnv(process.env);
 
-interface HealthResponse {
-	status: 'ok';
-}
-
-const app = express();
-
-app.get('/api/health', (_req: Request, res: Response<HealthResponse>) => {
-	res.json({ status: 'ok' });
-});
-
-app.listen(PORT, (error) => {
+createApp().listen(PORT, (error) => {
 	if (error) {
 		throw error;
 	}
