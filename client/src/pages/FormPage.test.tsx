@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent, {
 	PointerEventsCheckLevel,
 } from '@testing-library/user-event';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { uploadVehicle } from '../api/uploadVehicle.ts';
 import FormPage from './FormPage.tsx';
@@ -9,6 +10,11 @@ import FormPage from './FormPage.tsx';
 vi.mock('../api/uploadVehicle.ts', () => ({ uploadVehicle: vi.fn() }));
 
 let user: ReturnType<typeof userEvent.setup>;
+
+function UploadLocation() {
+	const location = useLocation();
+	return <output>{JSON.stringify(location.state)}</output>;
+}
 
 function field(label: string) {
 	return screen.queryByRole('combobox', { name: label });
@@ -22,7 +28,14 @@ async function choose(label: string, option: string) {
 beforeEach(() => {
 	vi.mocked(uploadVehicle).mockReset();
 	user = userEvent.setup();
-	render(<FormPage />);
+	render(
+		<MemoryRouter>
+			<Routes>
+				<Route path="/" element={<FormPage />} />
+				<Route path="/upload" element={<UploadLocation />} />
+			</Routes>
+		</MemoryRouter>,
+	);
 });
 
 describe('FormPage vehicle selection', () => {
@@ -283,5 +296,57 @@ describe('FormPage submit errors', () => {
 		await user.click(screen.getByRole('button', { name: 'Submit' }));
 
 		expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+	});
+});
+
+describe('FormPage submit success', () => {
+	async function selectTesla() {
+		await user.click(
+			screen.getByRole('button', { name: 'Tesla Model 3 Performance' }),
+		);
+	}
+
+	async function expectNavigatedWith(state: unknown) {
+		await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+		expect(
+			screen.queryByRole('heading', { name: 'Select a vehicle' }),
+		).not.toBeInTheDocument();
+		expect(screen.getByRole('status')).toHaveTextContent(JSON.stringify(state));
+	}
+
+	it('moves to /upload with the response when a logbook is attached', async () => {
+		const response = {
+			make: 'tesla',
+			model: 'Model 3',
+			badge: 'Performance',
+			logbook: {
+				filename: 'logbook.txt',
+				contents: '2020/05/01: Initial Service',
+			},
+		};
+		vi.mocked(uploadVehicle).mockResolvedValue({ ok: true, data: response });
+		await selectTesla();
+		await user.upload(
+			screen.getByLabelText('Attach logbook'),
+			new File([response.logbook.contents], 'logbook.txt', {
+				type: 'text/plain',
+			}),
+		);
+
+		await expectNavigatedWith(response);
+	});
+
+	it('moves to /upload with the response when no logbook is attached', async () => {
+		const response = {
+			make: 'tesla',
+			model: 'Model 3',
+			badge: 'Performance',
+			logbook: null,
+		};
+		vi.mocked(uploadVehicle).mockResolvedValue({ ok: true, data: response });
+		await selectTesla();
+
+		await expectNavigatedWith(response);
 	});
 });

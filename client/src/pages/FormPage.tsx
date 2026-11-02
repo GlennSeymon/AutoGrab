@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { FormEvent } from 'react';
+import { useNavigate } from 'react-router';
 import { uploadVehicle } from '../api/uploadVehicle.ts';
 import LogbookInput from '../components/LogbookInput.tsx';
 import QuickSelectButtons from '../components/QuickSelectButtons.tsx';
@@ -25,11 +26,13 @@ function FormPage() {
 		clear,
 		removeLogbook,
 	} = useVehicleForm();
+	const navigate = useNavigate();
 	const { isSubmitting, errors } = form.formState;
 
 	const submit = form.handleSubmit(async (values) => {
 		const result = await uploadVehicle(values);
 		if (result.ok) {
+			navigate('/upload', { state: result.data });
 			return;
 		}
 		const { message, field } = result.error;
