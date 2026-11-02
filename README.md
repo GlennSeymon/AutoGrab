@@ -52,6 +52,22 @@ Changing a Make or Model clears the fields below it. The **quick-select** button
 | `/`       | The vehicle selection form                         |
 | `/upload` | The submitted selections and logbook contents only |
 
+## Screenshots
+
+| The empty form, with the quick-select buttons  | A selected vehicle with a logbook attached       |
+| ---------------------------------------------- | ------------------------------------------------ |
+| ![Empty form](docs/screenshots/form-empty.png) | ![Filled form](docs/screenshots/form-filled.png) |
+
+| An empty logbook, rejected straight away          | The result page                             |
+| ------------------------------------------------- | ------------------------------------------- |
+| ![Logbook error](docs/screenshots/form-error.png) | ![Result page](docs/screenshots/result.png) |
+
+| The result page in light mode                                 | The form on a 320px-wide screen                     |
+| ------------------------------------------------------------- | --------------------------------------------------- |
+| ![Result page, light mode](docs/screenshots/result-light.png) | ![Form on mobile](docs/screenshots/form-mobile.png) |
+
+Use the icon in the header to switch between the System, Light and Dark themes.
+
 ## Project structure
 
 ```
