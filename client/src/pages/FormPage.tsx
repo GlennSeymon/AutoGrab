@@ -1,6 +1,7 @@
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import LogbookInput from '../components/LogbookInput.tsx';
 import QuickSelectButtons from '../components/QuickSelectButtons.tsx';
 import SelectField from '../components/SelectField.tsx';
 import { useVehicleForm } from '../form/useVehicleForm.ts';
@@ -14,9 +15,12 @@ function FormPage() {
 		badgeOptions,
 		showModel,
 		showBadge,
+		isSelectionComplete,
+		logbookInputKey,
 		selectField,
 		quickSelect,
 		clear,
+		removeLogbook,
 	} = useVehicleForm();
 
 	return (
@@ -50,7 +54,21 @@ function FormPage() {
 					onValueChange={(value) => selectField('badge', value)}
 				/>
 			)}
-			<Stack direction="row">
+			{isSelectionComplete && (
+				<LogbookInput
+					control={form.control}
+					name="logbook"
+					label="Attach logbook"
+					inputKey={logbookInputKey}
+					onRemove={removeLogbook}
+				/>
+			)}
+			<Stack direction="row" spacing={2}>
+				{isSelectionComplete && (
+					<Button type="submit" variant="contained">
+						Submit
+					</Button>
+				)}
 				<Button variant="text" onClick={clear}>
 					Clear
 				</Button>

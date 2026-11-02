@@ -139,3 +139,45 @@ describe('FormPage clear', () => {
 		).toHaveAttribute('aria-pressed', 'false');
 	});
 });
+
+describe('FormPage logbook and submit', () => {
+	const LOGBOOK = new File(['2020/05/01: Initial Service'], 'logbook.txt', {
+		type: 'text/plain',
+	});
+
+	function logbookInput() {
+		return screen.queryByLabelText('Attach logbook');
+	}
+
+	function submitButton() {
+		return screen.queryByRole('button', { name: 'Submit' });
+	}
+
+	it('appears only once a Badge is selected', async () => {
+		await choose('Make', 'Ford');
+		await choose('Model', 'Falcon');
+		expect(logbookInput()).not.toBeInTheDocument();
+		expect(submitButton()).not.toBeInTheDocument();
+
+		await choose('Badge', 'XR6');
+		expect(logbookInput()).toBeInTheDocument();
+		expect(submitButton()).toBeInTheDocument();
+
+		await choose('Badge', 'Select a badge…');
+		expect(logbookInput()).not.toBeInTheDocument();
+		expect(submitButton()).not.toBeInTheDocument();
+	});
+
+	it('clears the logbook when a new Badge is chosen', async () => {
+		await choose('Make', 'Ford');
+		await choose('Model', 'Falcon');
+		await choose('Badge', 'XR6');
+		await user.upload(logbookInput()!, LOGBOOK);
+		expect(screen.getByText('logbook.txt')).toBeInTheDocument();
+
+		await choose('Badge', 'XR8');
+
+		expect(screen.queryByText('logbook.txt')).not.toBeInTheDocument();
+		expect(logbookInput()).toHaveProperty('files.length', 0);
+	});
+});
