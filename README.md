@@ -160,3 +160,5 @@ Work the brief doesn't ask for, such as a database for vehicle data and submissi
 The code in this repository is released under the [MIT License](LICENSE).
 
 The challenge brief ([AutoGrab-VehicleSelectionForm.md](AutoGrab-VehicleSelectionForm.md)) and the supplied vehicle data belong to AutoGrab. They are included for reference only and are not covered by the MIT License.
+
+The AutoGrab name, logos and favicon (in [client/public/](client/public/)) and the brand they represent belong to AutoGrab and are not covered by the MIT License. They are used only to theme this coding challenge, which is not an official AutoGrab product.
