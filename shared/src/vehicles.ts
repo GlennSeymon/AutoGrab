@@ -25,3 +25,7 @@ export function getBadges(make: string, model: string): readonly Badge[] {
 		? vehicleData[make][model].toSorted()
 		: [];
 }
+
+export function formatMake(make: string): string {
+	return make.charAt(0).toUpperCase() + make.slice(1);
+}

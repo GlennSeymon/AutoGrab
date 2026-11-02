@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getBadges, getMakes, getModels } from './vehicles.ts';
+import { formatMake, getBadges, getMakes, getModels } from './vehicles.ts';
 
 describe('getMakes', () => {
 	it('returns every make sorted by name', () => {
@@ -45,5 +45,15 @@ describe('getBadges', () => {
 		['inherited key as model', 'ford', 'constructor'],
 	])('returns [] for %s', (_case, make, model) => {
 		expect(getBadges(make, model)).toEqual([]);
+	});
+});
+
+describe('formatMake', () => {
+	it.each([
+		['ford', 'Ford'],
+		['bmw', 'Bmw'],
+		['tesla', 'Tesla'],
+	])('formats %j as %j', (make, expected) => {
+		expect(formatMake(make)).toBe(expected);
 	});
 });
