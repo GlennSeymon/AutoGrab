@@ -6,7 +6,9 @@
       "Bash(git symbolic-ref *)",
       "Bash(python3 -I - implementation-plan.md)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(python3 -)",
+      "Bash(npx prettier *)"
     ]
   }
 }
