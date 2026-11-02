@@ -67,10 +67,11 @@ Not installed in the initial build. An AutoGrab-inspired theme (colours, fonts a
 | Not used                                       | Reason                                                                                       |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | Redux, Zustand or other state libraries        | React Hook Form plus router navigation state covers everything                               |
-| TanStack Query                                 | One request, no caching                                                                      |
+| TanStack Query                                 | One request, no caching (see [Future improvements](future-improvements.md))                  |
 | Next.js / React Router framework mode          | The brief asks for a separate Node backend; server rendering adds complexity with no benefit |
 | `react-hook-form-mui`                          | An extra wrapper library; React Hook Form's `Controller` with MUI components is enough       |
-| Docker, databases, Playwright end-to-end tests | Out of scope for this challenge                                                              |
+| Docker, databases, Playwright end-to-end tests | Out of scope for this challenge (see [Future improvements](future-improvements.md))          |
+| Prisma or another ORM, Better Auth             | No database or users in this challenge                                                       |
 
 ## Known Risks
 

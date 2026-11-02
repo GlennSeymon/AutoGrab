@@ -69,6 +69,7 @@ The vehicle data lives once, in `shared/`, and is imported by both the client (t
 | -------------------------------------------------------------------- | ----------------------------------------------------------- |
 | [AutoGrab-VehicleSelectionForm.md](AutoGrab-VehicleSelectionForm.md) | The original challenge brief                                |
 | [tech-stack.md](tech-stack.md)                                       | Libraries used and why, plus what was deliberately left out |
+| [future-improvements.md](future-improvements.md)                     | What would come next, and why it was left out               |
 
 ## API
 
@@ -133,6 +134,10 @@ curl -F make=tesla -F model="Model 3" -F badge=Performance \
 - **One validation schema, used twice.** The Make/Model/Badge rules are a Zod schema in `shared/`. The form validates with it through React Hook Form, and the server validates with the same schema, so both give identical messages. API request and response types are inferred from the schemas.
 - **The server validates selections against the shared vehicle data.** It doesn't trust the client's dropdowns. Badge names repeat across models (e.g. `XR6`), so validation always checks the full Make → Model → Badge path.
 - **No database, auth or state-management library.** These were left out deliberately; see [tech-stack.md](tech-stack.md#deliberately-not-used) for the reasons.
+
+## Future improvements
+
+Work the brief doesn't ask for, such as a database for vehicle data and submissions, authentication, production deployment and an accessibility pass, is listed in [future-improvements.md](future-improvements.md).
 
 ## License
 
