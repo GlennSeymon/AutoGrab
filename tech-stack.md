@@ -20,6 +20,8 @@ The technologies used in this project and why each was chosen. Versions are the 
 | Material UI (`@mui/material`, `@emotion/react`, `@emotion/styled`) | 9.x | Ready-made, accessible form components. Starts with the default theme; an AutoGrab-inspired theme comes later. Emotion is a required peer dependency |
 | `@mui/icons-material`                                      | 9.x      | Optional: upload and clear icons                                                                               |
 | React Router (`react-router`)                              | 8.x      | Routes `/` (form) and `/upload` (result), and passes the result between them. Declarative mode only            |
+| React Hook Form (`react-hook-form`)                        | 7.x      | Form state, validation timing, submitting state and mapping server errors onto fields. MUI inputs are wired with `Controller` |
+| `@hookform/resolvers`                                      | 7.x      | Connects the shared Zod schema to React Hook Form (`zodResolver`)                                              |
 | `fetch` + `FormData`                                       | built-in | A single multipart POST doesn't justify an HTTP client library                                                 |
 
 ## Server
@@ -29,13 +31,14 @@ The technologies used in this project and why each was chosen. Versions are the 
 | Express     | 5.x          | Widely known; errors thrown in `async` handlers reach the error handler without wrappers                      |
 | Multer      | 2.x          | Multipart handling for the logbook; memory storage with a 1 MB limit, nothing written to disk                 |
 | tsx         | 4.x          | Runs the TypeScript server directly (watch mode in development); no server build step                        |
-| Validation  | hand-written | Checking three fields against `vehicles.json` is a few lines; a schema library isn't needed                   |
+| Validation  | Zod (from `shared/`) | The same schema the form uses validates `make`, `model` and `badge`. Logbook byte checks (UTF-8, NUL bytes) stay a plain function |
 
 ## Shared
 
 | Choice                    | Why                                                                                                     |
 | ------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `shared/` workspace package | Single source for `vehicles.json`, vehicle types, lookup/validation helpers and API contract types   |
+| `shared/` workspace package | Single source for `vehicles.json`, lookup helpers, validation schemas and API contract types         |
+| Zod 4.x                   | One schema validates the selection on both client and server, so both give identical messages. API request/response types are inferred from the schemas (`z.infer`) rather than written twice |
 | Consumed as TypeScript source | Vite and tsx both handle `.ts` directly, so the package needs no build step                      |
 
 ## Planned for Later (Theme & Branding)
@@ -62,13 +65,14 @@ Not installed in the initial build. An AutoGrab-inspired theme (colours, fonts a
 
 | Not used                                       | Reason                                                                                     |
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Redux, Zustand or other state libraries        | `useReducer` plus router navigation state covers everything                                |
+| Redux, Zustand or other state libraries        | React Hook Form plus router navigation state covers everything                             |
 | TanStack Query, axios                          | One request, no caching                                                                    |
 | Next.js / React Router framework mode          | The brief asks for a separate Node backend; server rendering adds complexity with no benefit |
-| Zod or other schema libraries                  | Validation is small enough to write by hand; easy to add later if the API grows            |
+| `react-hook-form-mui`                          | An extra wrapper library; React Hook Form's `Controller` with MUI components is enough     |
 | Docker, databases, Playwright end-to-end tests | Out of scope for this challenge                                                            |
 
 ## Known Risks
 
 - **TypeScript 7:** before upgrading, confirm typescript-eslint supports it.
+- **`zodResolver` types:** let `useForm` infer its types from the resolver (or pass input, context and output generics). A single `useForm<T>` generic conflicts with Zod schemas whose input and output types differ.
 - **Shared TypeScript source with no build step:** works with Vite and tsx. If the server ever needs compiling with `tsc`, `shared/` will need its own build step or TypeScript project references.

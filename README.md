@@ -55,9 +55,9 @@ Changing a Make or Model clears the fields below it. The **quick-select** button
 ## Project structure
 
 ```
-client/   React + TypeScript + Vite + Material UI + React Router front end
+client/   React + TypeScript + Vite + Material UI + React Router + React Hook Form front end
 server/   Express + TypeScript API
-shared/   Vehicle data (vehicles.json), types and helpers used by both
+shared/   Vehicle data (vehicles.json), Zod schemas, types and helpers used by both
 samples/  Sample logbook file
 ```
 
@@ -122,6 +122,7 @@ curl -F make=tesla -F model="Model 3" -F badge=Performance \
 
 - **Plain-text detection is based on content, not file extension.** Files are accepted if they decode as UTF-8 and contain no NUL bytes, so `.log`, `.md` or extension-less text files work. A leading BOM is stripped and Windows line endings are normalised.
 - **Uploads are never written to disk.** Multer keeps the file in memory, with a 1 MB limit.
+- **One validation schema, used twice.** The Make/Model/Badge rules are a Zod schema in `shared/`. The form validates with it through React Hook Form, and the server validates with the same schema, so both give identical messages. API request and response types are inferred from the schemas.
 - **The server validates selections against the shared vehicle data.** It doesn't trust the client's dropdowns. Badge names repeat across models (e.g. `XR6`), so validation always checks the full Make → Model → Badge path.
 - **No database, auth or state-management library.** These were left out deliberately; see [tech-stack.md](tech-stack.md#deliberately-not-used) for the reasons.
 
