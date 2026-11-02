@@ -4,10 +4,24 @@ export type Make = string;
 export type Model = string;
 export type Badge = string;
 
-/** A make's models, each with its badges, in the order supplied in the brief. */
 export type BadgesByModel = Readonly<Record<Model, readonly Badge[]>>;
 
-/** Make → Model → Badges, in the order supplied in the brief. */
 export type VehicleData = Readonly<Record<Make, BadgesByModel>>;
 
 export const vehicleData: VehicleData = vehiclesJson;
+
+export function getMakes(): readonly Make[] {
+	return Object.keys(vehicleData).toSorted();
+}
+
+export function getModels(make: string): readonly Model[] {
+	return Object.hasOwn(vehicleData, make)
+		? Object.keys(vehicleData[make]).toSorted()
+		: [];
+}
+
+export function getBadges(make: string, model: string): readonly Badge[] {
+	return getModels(make).includes(model)
+		? vehicleData[make][model].toSorted()
+		: [];
+}
