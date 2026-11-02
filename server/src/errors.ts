@@ -16,6 +16,10 @@ function multerErrorBody(error: MulterError): ApiError {
 	return { error: { message: error.message, field } };
 }
 
+export function handleNotFound(_req: Request, res: Response<ApiError>) {
+	res.status(HttpStatus.NOT_FOUND).json({ error: { message: 'Not found' } });
+}
+
 export function handleErrors(
 	error: unknown,
 	_req: Request,

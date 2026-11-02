@@ -11,3 +11,13 @@ describe('GET /api/health', () => {
 		expect(response.body).toEqual({ status: 'ok' });
 	});
 });
+
+describe('unknown API routes', () => {
+	it('respond with a JSON not found error', async () => {
+		const response = await request(createApp()).get('/api/nope');
+
+		expect(response.status).toBe(HttpStatus.NOT_FOUND);
+		expect(response.type).toBe('application/json');
+		expect(response.body).toEqual({ error: { message: 'Not found' } });
+	});
+});
