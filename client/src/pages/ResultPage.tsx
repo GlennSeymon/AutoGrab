@@ -1,7 +1,18 @@
-import { uploadResponseSchema } from '@autograb/shared';
+import { formatMake, uploadResponseSchema } from '@autograb/shared';
 import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useLocation } from 'react-router';
+
+const VehicleDetails = styled('dl')(({ theme }) => ({
+	display: 'grid',
+	gridTemplateColumns: 'max-content 1fr',
+	columnGap: theme.spacing(2),
+	rowGap: theme.spacing(1),
+	margin: 0,
+	'& dt': { fontWeight: theme.typography.fontWeightBold },
+	'& dd': { margin: 0 },
+}));
 
 function ResultPage() {
 	const location = useLocation();
@@ -12,7 +23,16 @@ function ResultPage() {
 			<Typography variant="h5" component="h2">
 				Upload result
 			</Typography>
-			{!result.success && (
+			{result.success ? (
+				<VehicleDetails>
+					<dt>Make</dt>
+					<dd>{formatMake(result.data.make)}</dd>
+					<dt>Model</dt>
+					<dd>{result.data.model}</dd>
+					<dt>Badge</dt>
+					<dd>{result.data.badge}</dd>
+				</VehicleDetails>
+			) : (
 				<Typography>Nothing has been submitted yet</Typography>
 			)}
 		</Stack>

@@ -1,20 +1,28 @@
-import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { Outlet } from 'react-router';
 
+const PageContainer = styled(Container)(({ theme }) => ({
+	paddingBlock: theme.spacing(4),
+}));
+
+const Header = styled('header')(({ theme }) => ({
+	marginBottom: theme.spacing(3),
+}));
+
 function Layout() {
 	return (
-		<Container maxWidth="sm" sx={{ py: 4 }}>
-			<Box component="header" sx={{ mb: 3 }}>
+		<PageContainer maxWidth="sm">
+			<Header>
 				<Typography variant="h4" component="h1">
 					Vehicle Selection Form
 				</Typography>
-			</Box>
-			<Box component="main">
+			</Header>
+			<main>
 				<Outlet />
-			</Box>
-		</Container>
+			</main>
+		</PageContainer>
 	);
 }
 

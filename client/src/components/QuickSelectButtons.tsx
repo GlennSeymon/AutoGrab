@@ -1,6 +1,11 @@
 import { QUICK_SELECT_VEHICLES, type VehicleSelection } from '@autograb/shared';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+
+const ButtonGroup = styled(Stack)({
+	flexWrap: 'wrap',
+});
 
 interface QuickSelectButtonsProps {
 	selection: VehicleSelection;
@@ -22,11 +27,10 @@ function QuickSelectButtons({
 	disabled = false,
 }: QuickSelectButtonsProps) {
 	return (
-		<Stack
+		<ButtonGroup
 			direction="row"
 			spacing={1}
 			useFlexGap
-			sx={{ flexWrap: 'wrap' }}
 			role="group"
 			aria-label="Quick select"
 		>
@@ -44,7 +48,7 @@ function QuickSelectButtons({
 					</Button>
 				);
 			})}
-		</Stack>
+		</ButtonGroup>
 	);
 }
 

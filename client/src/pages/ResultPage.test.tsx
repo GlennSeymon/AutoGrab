@@ -40,3 +40,21 @@ describe('ResultPage state', () => {
 		expect(screen.queryByText(EMPTY_MESSAGE)).not.toBeInTheDocument();
 	});
 });
+
+describe('ResultPage vehicle', () => {
+	it('shows the submitted Make (formatted), Model and Badge', () => {
+		renderWithState(response);
+
+		const terms = screen.getAllByRole('term');
+		const values = screen.getAllByRole('definition');
+		const pairs = terms.map((term, index) => [
+			term.textContent,
+			values[index]?.textContent,
+		]);
+		expect(pairs).toEqual([
+			['Make', 'Ford'],
+			['Model', 'Falcon'],
+			['Badge', 'XR6'],
+		]);
+	});
+});

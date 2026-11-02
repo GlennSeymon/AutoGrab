@@ -23,6 +23,15 @@ const HiddenFileInput = styled('input')({
 	width: 1,
 });
 
+const FileRow = styled(Stack)({
+	alignItems: 'center',
+	flexWrap: 'wrap',
+});
+
+const FileName = styled(Typography)({
+	overflowWrap: 'anywhere',
+});
+
 interface LogbookInputProps<
 	TFieldValues extends FieldValues,
 	TTransformedValues,
@@ -53,12 +62,7 @@ function LogbookInput<TFieldValues extends FieldValues, TTransformedValues>({
 				const file: unknown = field.value;
 				return (
 					<Stack spacing={1}>
-						<Stack
-							direction="row"
-							spacing={2}
-							useFlexGap
-							sx={{ alignItems: 'center', flexWrap: 'wrap' }}
-						>
+						<FileRow direction="row" spacing={2} useFlexGap>
 							<Button component="label" variant="outlined" disabled={disabled}>
 								{label}
 								<HiddenFileInput
@@ -76,9 +80,7 @@ function LogbookInput<TFieldValues extends FieldValues, TTransformedValues>({
 							</Button>
 							{file instanceof File && (
 								<>
-									<Typography sx={{ overflowWrap: 'anywhere' }}>
-										{file.name}
-									</Typography>
+									<FileName>{file.name}</FileName>
 									<Button
 										variant="text"
 										aria-label={`Remove ${file.name}`}
@@ -89,7 +91,7 @@ function LogbookInput<TFieldValues extends FieldValues, TTransformedValues>({
 									</Button>
 								</>
 							)}
-						</Stack>
+						</FileRow>
 						{fieldState.error && (
 							<FormHelperText id={errorId} error>
 								{fieldState.error.message}
