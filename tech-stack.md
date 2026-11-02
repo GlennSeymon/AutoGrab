@@ -13,16 +13,16 @@ The technologies used in this project and why each was chosen. Versions are the 
 
 ## Client
 
-| Choice                                                             | Version  | Why                                                                                                                                                  |
-| ------------------------------------------------------------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| React                                                              | 19.x     | Required by the brief                                                                                                                                |
-| Vite                                                               | 8.x      | Fast dev server and build; proxies `/api` to the server during development                                                                           |
-| Material UI (`@mui/material`, `@emotion/react`, `@emotion/styled`) | 9.x      | Ready-made, accessible form components. Starts with the default theme; an AutoGrab-inspired theme comes later. Emotion is a required peer dependency |
-| `@mui/icons-material`                                              | 9.x      | Optional: upload and clear icons                                                                                                                     |
-| React Router (`react-router`)                                      | 8.x      | Routes `/` (form) and `/upload` (result), and passes the result between them. Declarative mode only                                                  |
-| React Hook Form (`react-hook-form`)                                | 7.x      | Form state, validation timing, submitting state and mapping server errors onto fields. MUI inputs are wired with `Controller`                        |
-| `@hookform/resolvers`                                              | 7.x      | Connects the shared Zod schema to React Hook Form (`zodResolver`)                                                                                    |
-| `fetch` + `FormData`                                               | built-in | A single multipart POST doesn't justify an HTTP client library                                                                                       |
+| Choice                                                             | Version | Why                                                                                                                                                  |
+| ------------------------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| React                                                              | 19.x    | Required by the brief                                                                                                                                |
+| Vite                                                               | 8.x     | Fast dev server and build; proxies `/api` to the server during development                                                                           |
+| Material UI (`@mui/material`, `@emotion/react`, `@emotion/styled`) | 9.x     | Ready-made, accessible form components. Starts with the default theme; an AutoGrab-inspired theme comes later. Emotion is a required peer dependency |
+| `@mui/icons-material`                                              | 9.x     | Optional: upload and clear icons                                                                                                                     |
+| React Router (`react-router`)                                      | 8.x     | Routes `/` (form) and `/upload` (result), and passes the result between them. Declarative mode only                                                  |
+| React Hook Form (`react-hook-form`)                                | 7.x     | Form state, validation timing, submitting state and mapping server errors onto fields. MUI inputs are wired with `Controller`                        |
+| `@hookform/resolvers`                                              | 7.x     | Connects the shared Zod schema to React Hook Form (`zodResolver`)                                                                                    |
+| Axios                                                              | 1.x     | Posts the multipart `FormData`; parses JSON replies and tells server errors apart from network failures (`isAxiosError`)                             |
 
 ## Server
 
@@ -58,6 +58,7 @@ Not installed in the initial build. An AutoGrab-inspired theme (colours, fonts a
 | React Testing Library, `@testing-library/user-event`, `@testing-library/jest-dom` | 16.x / 14.x / 7.x | Tests the form the way a user drives it                   |
 | jsdom                                                                             | 30.x              | Browser environment for client tests                      |
 | Supertest (+ `@types/supertest`)                                                  | 7.x               | Tests the Express app in memory without starting a server |
+| `axios-mock-adapter`                                                              | 2.x               | Mocks the client's HTTP calls at the Axios adapter        |
 | ESLint + typescript-eslint                                                        | 10.x / 8.x        | Linting across all workspaces, configured at the root     |
 | Prettier                                                                          | 3.x               | Consistent formatting                                     |
 
@@ -66,7 +67,7 @@ Not installed in the initial build. An AutoGrab-inspired theme (colours, fonts a
 | Not used                                       | Reason                                                                                       |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | Redux, Zustand or other state libraries        | React Hook Form plus router navigation state covers everything                               |
-| TanStack Query, axios                          | One request, no caching                                                                      |
+| TanStack Query                                 | One request, no caching                                                                      |
 | Next.js / React Router framework mode          | The brief asks for a separate Node backend; server rendering adds complexity with no benefit |
 | `react-hook-form-mui`                          | An extra wrapper library; React Hook Form's `Controller` with MUI components is enough       |
 | Docker, databases, Playwright end-to-end tests | Out of scope for this challenge                                                              |

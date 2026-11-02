@@ -1,5 +1,7 @@
 import { HttpStatus, type UploadResponse, UPLOAD_PATH } from '@autograb/shared';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import axios from 'axios';
+import AxiosMockAdapter from 'axios-mock-adapter';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
 	NETWORK_ERROR_MESSAGE,
 	UNEXPECTED_RESPONSE_MESSAGE,
@@ -8,14 +10,10 @@ import {
 
 const selection = { make: 'ford', model: 'Ranger', badge: 'Wildtrak' };
 
-function mockFetch(implementation: () => Promise<Response>) {
-	const fetchMock = vi.fn<typeof fetch>(implementation);
-	vi.stubGlobal('fetch', fetchMock);
-	return fetchMock;
-}
+const mock = new AxiosMockAdapter(axios);
 
 afterEach(() => {
-	vi.unstubAllGlobals();
+	mock.reset();
 });
 
 describe('uploadVehicle', () => {
@@ -24,7 +22,7 @@ describe('uploadVehicle', () => {
 			...selection,
 			logbook: { filename: 'logbook.txt', contents: 'Serviced' },
 		};
-		const fetchMock = mockFetch(async () => Response.json(data));
+		mock.onPost(UPLOAD_PATH).reply(HttpStatus.OK, data);
 		const logbook = new File(['Serviced'], 'logbook.txt', {
 			type: 'text/plain',
 		});
@@ -32,10 +30,9 @@ describe('uploadVehicle', () => {
 		const result = await uploadVehicle({ ...selection, logbook });
 
 		expect(result).toEqual({ ok: true, data });
-		const [url, init] = fetchMock.mock.calls[0];
-		expect(url).toBe(UPLOAD_PATH);
-		expect(init?.method).toBe('POST');
-		const body = init?.body as FormData;
+		const [request] = mock.history.post;
+		expect(request.url).toBe(UPLOAD_PATH);
+		const body = request.data as FormData;
 		expect(Object.fromEntries(body)).toEqual({
 			...selection,
 			logbook: expect.any(File),
@@ -48,17 +45,13 @@ describe('uploadVehicle', () => {
 			message: 'The logbook file is empty',
 			field: 'logbook' as const,
 		};
-		mockFetch(async () =>
-			Response.json({ error }, { status: HttpStatus.BAD_REQUEST }),
-		);
+		mock.onPost(UPLOAD_PATH).reply(HttpStatus.BAD_REQUEST, { error });
 
 		expect(await uploadVehicle(selection)).toEqual({ ok: false, error });
 	});
 
 	it('returns a network error when the request fails', async () => {
-		mockFetch(async () => {
-			throw new TypeError('Failed to fetch');
-		});
+		mock.onPost(UPLOAD_PATH).networkError();
 
 		expect(await uploadVehicle(selection)).toEqual({
 			ok: false,
@@ -67,12 +60,9 @@ describe('uploadVehicle', () => {
 	});
 
 	it('returns an unexpected response error for a non-JSON reply', async () => {
-		mockFetch(
-			async () =>
-				new Response('<h1>Bad Gateway</h1>', {
-					status: HttpStatus.INTERNAL_SERVER_ERROR,
-				}),
-		);
+		mock
+			.onPost(UPLOAD_PATH)
+			.reply(HttpStatus.INTERNAL_SERVER_ERROR, '<h1>Bad Gateway</h1>');
 
 		expect(await uploadVehicle(selection)).toEqual({
 			ok: false,
@@ -81,7 +71,7 @@ describe('uploadVehicle', () => {
 	});
 
 	it('returns an unexpected response error for JSON with the wrong shape', async () => {
-		mockFetch(async () => Response.json({ make: 'ford' }));
+		mock.onPost(UPLOAD_PATH).reply(HttpStatus.OK, { make: 'ford' });
 
 		expect(await uploadVehicle(selection)).toEqual({
 			ok: false,

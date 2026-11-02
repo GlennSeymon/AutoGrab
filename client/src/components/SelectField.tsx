@@ -17,6 +17,7 @@ interface SelectFieldProps<
 	label: string;
 	options: readonly SelectOption[];
 	onValueChange?: (value: string) => void;
+	disabled?: boolean;
 }
 
 function SelectField<TFieldValues extends FieldValues, TTransformedValues>({
@@ -25,6 +26,7 @@ function SelectField<TFieldValues extends FieldValues, TTransformedValues>({
 	label,
 	options,
 	onValueChange,
+	disabled = false,
 }: SelectFieldProps<TFieldValues, TTransformedValues>) {
 	return (
 		<Controller
@@ -36,6 +38,7 @@ function SelectField<TFieldValues extends FieldValues, TTransformedValues>({
 					fullWidth
 					label={label}
 					{...field}
+					disabled={disabled}
 					value={field.value ?? ''}
 					onChange={(event) =>
 						(onValueChange ?? field.onChange)(event.target.value)

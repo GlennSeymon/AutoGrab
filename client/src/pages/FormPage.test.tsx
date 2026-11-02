@@ -1,7 +1,12 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import userEvent, {
+	PointerEventsCheckLevel,
+} from '@testing-library/user-event';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { uploadVehicle } from '../api/uploadVehicle.ts';
 import FormPage from './FormPage.tsx';
+
+vi.mock('../api/uploadVehicle.ts', () => ({ uploadVehicle: vi.fn() }));
 
 let user: ReturnType<typeof userEvent.setup>;
 
@@ -179,5 +184,50 @@ describe('FormPage logbook and submit', () => {
 
 		expect(screen.queryByText('logbook.txt')).not.toBeInTheDocument();
 		expect(logbookInput()).toHaveProperty('files.length', 0);
+	});
+});
+
+describe('FormPage submitting', () => {
+	it('disables every input and button while submitting', async () => {
+		vi.mocked(uploadVehicle).mockReturnValue(new Promise(() => {}));
+		await user.click(
+			screen.getByRole('button', { name: 'Tesla Model 3 Performance' }),
+		);
+		await user.upload(
+			screen.getByLabelText('Attach logbook'),
+			new File(['2020/05/01: Initial Service'], 'logbook.txt', {
+				type: 'text/plain',
+			}),
+		);
+
+		await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+		for (const label of ['Make', 'Model', 'Badge']) {
+			expect(field(label)).toHaveAttribute('aria-disabled', 'true');
+		}
+		expect(screen.getByLabelText('Attach logbook')).toBeDisabled();
+		for (const name of [
+			'Tesla Model 3 Performance',
+			'BMW 130d xDrive 26d',
+			'Remove logbook.txt',
+			'Submit',
+			'Clear',
+		]) {
+			expect(screen.getByRole('button', { name })).toBeDisabled();
+		}
+		expect(screen.getByRole('progressbar')).toBeInTheDocument();
+
+		await userEvent
+			.setup({ pointerEventsCheck: PointerEventsCheckLevel.Never })
+			.click(screen.getByRole('button', { name: 'Submit' }));
+
+		expect(uploadVehicle).toHaveBeenCalledOnce();
+		expect(uploadVehicle).toHaveBeenCalledWith(
+			expect.objectContaining({
+				make: 'tesla',
+				model: 'Model 3',
+				badge: 'Performance',
+			}),
+		);
 	});
 });

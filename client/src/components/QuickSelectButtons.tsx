@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 interface QuickSelectButtonsProps {
 	selection: VehicleSelection;
 	onSelect: (selection: VehicleSelection) => void;
+	disabled?: boolean;
 }
 
 function isActive(preset: VehicleSelection, selection: VehicleSelection) {
@@ -15,7 +16,11 @@ function isActive(preset: VehicleSelection, selection: VehicleSelection) {
 	);
 }
 
-function QuickSelectButtons({ selection, onSelect }: QuickSelectButtonsProps) {
+function QuickSelectButtons({
+	selection,
+	onSelect,
+	disabled = false,
+}: QuickSelectButtonsProps) {
 	return (
 		<Stack
 			direction="row"
@@ -32,6 +37,7 @@ function QuickSelectButtons({ selection, onSelect }: QuickSelectButtonsProps) {
 						key={vehicle.label}
 						variant={active ? 'contained' : 'outlined'}
 						aria-pressed={active}
+						disabled={disabled}
 						onClick={() => onSelect(vehicle.selection)}
 					>
 						{vehicle.label}

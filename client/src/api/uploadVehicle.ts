@@ -7,6 +7,7 @@ import {
 	uploadResponseSchema,
 	type VehicleSelection,
 } from '@autograb/shared';
+import axios from 'axios';
 
 export interface UploadVehicleInput extends VehicleSelection {
 	logbook?: File;
@@ -37,36 +38,22 @@ function toFormData({ make, model, badge, logbook }: UploadVehicleInput) {
 	return formData;
 }
 
-async function readJson(response: Response): Promise<unknown> {
-	try {
-		return await response.json();
-	} catch {
-		return undefined;
-	}
-}
-
 export async function uploadVehicle(
 	input: UploadVehicleInput,
 ): Promise<UploadVehicleResult> {
-	let response: Response;
 	try {
-		response = await fetch(UPLOAD_PATH, {
-			method: 'POST',
-			body: toFormData(input),
-		});
-	} catch {
-		return failure(NETWORK_ERROR_MESSAGE);
-	}
-
-	const body = await readJson(response);
-	if (response.ok) {
-		const result = uploadResponseSchema.safeParse(body);
+		const response = await axios.post<unknown>(UPLOAD_PATH, toFormData(input));
+		const result = uploadResponseSchema.safeParse(response.data);
 		return result.success
 			? { ok: true, data: result.data }
 			: failure(UNEXPECTED_RESPONSE_MESSAGE);
+	} catch (error) {
+		if (!axios.isAxiosError<unknown>(error) || !error.response) {
+			return failure(NETWORK_ERROR_MESSAGE);
+		}
+		const result = apiErrorSchema.safeParse(error.response.data);
+		return result.success
+			? { ok: false, error: result.data.error }
+			: failure(UNEXPECTED_RESPONSE_MESSAGE);
 	}
-	const result = apiErrorSchema.safeParse(body);
-	return result.success
-		? { ok: false, error: result.data.error }
-		: failure(UNEXPECTED_RESPONSE_MESSAGE);
 }

@@ -32,6 +32,7 @@ interface LogbookInputProps<
 	label: string;
 	inputKey: number;
 	onRemove: () => void;
+	disabled?: boolean;
 }
 
 function LogbookInput<TFieldValues extends FieldValues, TTransformedValues>({
@@ -40,6 +41,7 @@ function LogbookInput<TFieldValues extends FieldValues, TTransformedValues>({
 	label,
 	inputKey,
 	onRemove,
+	disabled = false,
 }: LogbookInputProps<TFieldValues, TTransformedValues>) {
 	const errorId = useId();
 
@@ -57,7 +59,7 @@ function LogbookInput<TFieldValues extends FieldValues, TTransformedValues>({
 							useFlexGap
 							sx={{ alignItems: 'center', flexWrap: 'wrap' }}
 						>
-							<Button component="label" variant="outlined">
+							<Button component="label" variant="outlined" disabled={disabled}>
 								{label}
 								<HiddenFileInput
 									key={inputKey}
@@ -66,6 +68,7 @@ function LogbookInput<TFieldValues extends FieldValues, TTransformedValues>({
 									name={field.name}
 									ref={field.ref}
 									onBlur={field.onBlur}
+									disabled={disabled}
 									aria-invalid={fieldState.invalid}
 									aria-describedby={fieldState.error ? errorId : undefined}
 									onChange={(event) => field.onChange(event.target.files?.[0])}
@@ -80,6 +83,7 @@ function LogbookInput<TFieldValues extends FieldValues, TTransformedValues>({
 										variant="text"
 										aria-label={`Remove ${file.name}`}
 										onClick={onRemove}
+										disabled={disabled}
 									>
 										Remove
 									</Button>
