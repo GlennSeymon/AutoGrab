@@ -122,3 +122,20 @@ describe('FormPage quick select', () => {
 		);
 	});
 });
+
+describe('FormPage clear', () => {
+	it('returns the form to its initial state', async () => {
+		await user.click(
+			screen.getByRole('button', { name: 'Tesla Model 3 Performance' }),
+		);
+
+		await user.click(screen.getByRole('button', { name: 'Clear' }));
+
+		expect(field('Make')).toHaveTextContent('Select a make…');
+		expect(field('Model')).not.toBeInTheDocument();
+		expect(field('Badge')).not.toBeInTheDocument();
+		expect(
+			screen.getByRole('button', { name: 'Tesla Model 3 Performance' }),
+		).toHaveAttribute('aria-pressed', 'false');
+	});
+});

@@ -1,3 +1,4 @@
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import QuickSelectButtons from '../components/QuickSelectButtons.tsx';
@@ -15,6 +16,7 @@ function FormPage() {
 		showBadge,
 		selectField,
 		quickSelect,
+		clear,
 	} = useVehicleForm();
 
 	return (
@@ -48,6 +50,11 @@ function FormPage() {
 					onValueChange={(value) => selectField('badge', value)}
 				/>
 			)}
+			<Stack direction="row">
+				<Button variant="text" onClick={clear}>
+					Clear
+				</Button>
+			</Stack>
 		</Stack>
 	);
 }
