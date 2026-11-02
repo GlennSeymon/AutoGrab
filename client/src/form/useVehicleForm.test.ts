@@ -13,7 +13,7 @@ describe('useVehicleForm', () => {
 		const result = renderVehicleForm();
 
 		expect(result.current.makeOptions).toEqual([
-			{ value: 'bmw', label: 'Bmw' },
+			{ value: 'bmw', label: 'BMW' },
 			{ value: 'ford', label: 'Ford' },
 			{ value: 'tesla', label: 'Tesla' },
 		]);

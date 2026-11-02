@@ -10,6 +10,10 @@ export type VehicleData = Readonly<Record<Make, BadgesByModel>>;
 
 export const vehicleData: VehicleData = vehiclesJson;
 
+const MAKE_NAMES: Readonly<Record<Make, string>> = {
+	bmw: 'BMW',
+};
+
 export function getMakes(): readonly Make[] {
 	return Object.keys(vehicleData).toSorted();
 }
@@ -27,5 +31,7 @@ export function getBadges(make: string, model: string): readonly Badge[] {
 }
 
 export function formatMake(make: string): string {
-	return make.charAt(0).toUpperCase() + make.slice(1);
+	return Object.hasOwn(MAKE_NAMES, make)
+		? MAKE_NAMES[make]
+		: make.charAt(0).toUpperCase() + make.slice(1);
 }

@@ -51,7 +51,7 @@ describe('getBadges', () => {
 describe('formatMake', () => {
 	it.each([
 		['ford', 'Ford'],
-		['bmw', 'Bmw'],
+		['bmw', 'BMW'],
 		['tesla', 'Tesla'],
 	])('formats %j as %j', (make, expected) => {
 		expect(formatMake(make)).toBe(expected);

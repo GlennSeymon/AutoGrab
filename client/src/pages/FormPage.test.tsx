@@ -62,7 +62,7 @@ describe('FormPage vehicle selection', () => {
 		await choose('Model', 'Falcon');
 		await choose('Badge', 'XR6');
 
-		await choose('Make', 'Bmw');
+		await choose('Make', 'BMW');
 
 		expect(field('Model')).toHaveTextContent('Select a model…');
 		expect(field('Badge')).not.toBeInTheDocument();
@@ -99,7 +99,7 @@ describe('FormPage quick select', () => {
 	it('fills all three fields and highlights only the chosen preset', async () => {
 		await user.click(preset('BMW 130d xDrive 26d'));
 
-		expect(field('Make')).toHaveTextContent('Bmw');
+		expect(field('Make')).toHaveTextContent('BMW');
 		expect(field('Model')).toHaveTextContent('130d');
 		expect(field('Badge')).toHaveTextContent('xDrive 26d');
 		expect(preset('BMW 130d xDrive 26d')).toHaveAttribute(
