@@ -3,16 +3,20 @@ import {
 	LOGBOOK_FIELD,
 	type LogbookResult,
 } from '@autograb/shared';
+import { HttpStatus } from './httpStatus.ts';
 
 export type LogbookFile = Pick<Express.Multer.File, 'originalname' | 'buffer'>;
 
+type FailureStatus =
+	typeof HttpStatus.BAD_REQUEST | typeof HttpStatus.UNSUPPORTED_MEDIA_TYPE;
+
 export type ReadLogbookResult =
 	| { ok: true; logbook: LogbookResult }
-	| { ok: false; status: 400 | 415; error: ApiError };
+	| { ok: false; status: FailureStatus; error: ApiError };
 
 const decoder = new TextDecoder('utf-8', { fatal: true });
 
-function failure(status: 400 | 415, message: string): ReadLogbookResult {
+function failure(status: FailureStatus, message: string): ReadLogbookResult {
 	return {
 		ok: false,
 		status,
@@ -30,11 +34,14 @@ function decode(buffer: Buffer) {
 
 export function readLogbook(file: LogbookFile): ReadLogbookResult {
 	if (file.buffer.length === 0) {
-		return failure(400, 'The logbook file is empty');
+		return failure(HttpStatus.BAD_REQUEST, 'The logbook file is empty');
 	}
 	const text = decode(file.buffer);
 	if (text === null || text.includes('\0')) {
-		return failure(415, 'The logbook must be a plain text file');
+		return failure(
+			HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+			'The logbook must be a plain text file',
+		);
 	}
 	return {
 		ok: true,

@@ -10,6 +10,7 @@ import {
 import type { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import { readLogbook } from './logbook.ts';
+import { HttpStatus } from './httpStatus.ts';
 
 export interface UploadLocals {
 	selection: VehicleSelection;
@@ -29,7 +30,7 @@ export function validateSelection(
 	const result = vehicleSelectionSchema.safeParse(req.body ?? {});
 	if (!result.success) {
 		const [issue] = result.error.issues;
-		res.status(400).json({
+		res.status(HttpStatus.BAD_REQUEST).json({
 			error: {
 				message: issue.message,
 				field: UPLOAD_FIELDS.find((field) => field === issue.path[0]),

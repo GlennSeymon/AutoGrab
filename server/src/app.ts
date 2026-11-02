@@ -1,5 +1,6 @@
 import { UPLOAD_PATH } from '@autograb/shared';
 import express, { type Request, type Response } from 'express';
+import { handleErrors } from './errors.ts';
 import { handleUpload, parseLogbook, validateSelection } from './upload.ts';
 
 interface HealthResponse {
@@ -14,6 +15,8 @@ export function createApp() {
 	});
 
 	app.post(UPLOAD_PATH, parseLogbook, validateSelection, handleUpload);
+
+	app.use(handleErrors);
 
 	return app;
 }

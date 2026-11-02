@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { readLogbook } from './logbook.ts';
+import { HttpStatus } from './httpStatus.ts';
 
 function fileWith(contents: Buffer | string) {
 	return { originalname: 'logbook.txt', buffer: Buffer.from(contents) };
@@ -22,10 +23,10 @@ describe('readLogbook', () => {
 		});
 	});
 
-	it('rejects an empty file with 400', () => {
+	it('rejects an empty file as a bad request', () => {
 		expect(readLogbook(fileWith(''))).toEqual({
 			ok: false,
-			status: 400,
+			status: HttpStatus.BAD_REQUEST,
 			error: {
 				error: { message: 'The logbook file is empty', field: 'logbook' },
 			},
@@ -35,10 +36,10 @@ describe('readLogbook', () => {
 	it.each([
 		['invalid UTF-8', Buffer.from([0x89, 0x50, 0x4e, 0x47, 0xff])],
 		['NUL bytes', Buffer.from('text\0more')],
-	])('rejects %s with 415', (_case, buffer) => {
+	])('rejects %s as unsupported media', (_case, buffer) => {
 		expect(readLogbook(fileWith(buffer))).toEqual({
 			ok: false,
-			status: 415,
+			status: HttpStatus.UNSUPPORTED_MEDIA_TYPE,
 			error: {
 				error: {
 					message: 'The logbook must be a plain text file',
