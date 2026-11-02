@@ -13,6 +13,13 @@ const response: UploadResponse = {
 	logbook: null,
 };
 
+function detailPairs() {
+	const values = screen.getAllByRole('definition');
+	return screen
+		.getAllByRole('term')
+		.map((term, index) => [term.textContent, values[index]?.textContent]);
+}
+
 function renderWithState(state?: unknown) {
 	render(
 		<MemoryRouter initialEntries={[{ pathname: '/upload', state }]}>
@@ -45,16 +52,48 @@ describe('ResultPage vehicle', () => {
 	it('shows the submitted Make (formatted), Model and Badge', () => {
 		renderWithState(response);
 
-		const terms = screen.getAllByRole('term');
-		const values = screen.getAllByRole('definition');
-		const pairs = terms.map((term, index) => [
-			term.textContent,
-			values[index]?.textContent,
-		]);
-		expect(pairs).toEqual([
+		expect(detailPairs().slice(0, 3)).toEqual([
 			['Make', 'Ford'],
 			['Model', 'Falcon'],
 			['Badge', 'XR6'],
 		]);
+	});
+});
+
+describe('ResultPage logbook', () => {
+	function logbookContents() {
+		return screen.queryByRole('region', { name: 'Logbook contents' });
+	}
+
+	it('shows the filename and the full multi-line contents', () => {
+		const contents = `Service 1: oil change\n${'x'.repeat(500)}\n\n  Indented line\n`;
+		renderWithState({
+			...response,
+			logbook: { filename: 'logbook.txt', contents },
+		});
+
+		expect(detailPairs()).toContainEqual(['Logbook', 'logbook.txt']);
+		expect(logbookContents()).toHaveTextContent(contents, {
+			normalizeWhitespace: false,
+		});
+	});
+
+	it('shows "No logbook submitted" when there is no logbook', () => {
+		renderWithState(response);
+
+		expect(detailPairs()).toContainEqual(['Logbook', 'No logbook submitted']);
+		expect(logbookContents()).not.toBeInTheDocument();
+	});
+
+	it('shows HTML in the logbook as text instead of rendering it', () => {
+		const contents = '<img src="x" alt="injected"><b>bold</b>';
+		renderWithState({
+			...response,
+			logbook: { filename: 'logbook.txt', contents },
+		});
+
+		const region = logbookContents();
+		expect(region).toHaveTextContent(contents);
+		expect(region?.children).toHaveLength(0);
 	});
 });
