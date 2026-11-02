@@ -16,6 +16,7 @@ interface SelectFieldProps<
 	name: FieldPath<TFieldValues>;
 	label: string;
 	options: readonly SelectOption[];
+	onValueChange?: (value: string) => void;
 }
 
 function SelectField<TFieldValues extends FieldValues, TTransformedValues>({
@@ -23,6 +24,7 @@ function SelectField<TFieldValues extends FieldValues, TTransformedValues>({
 	name,
 	label,
 	options,
+	onValueChange,
 }: SelectFieldProps<TFieldValues, TTransformedValues>) {
 	return (
 		<Controller
@@ -35,6 +37,9 @@ function SelectField<TFieldValues extends FieldValues, TTransformedValues>({
 					label={label}
 					{...field}
 					value={field.value ?? ''}
+					onChange={(event) =>
+						(onValueChange ?? field.onChange)(event.target.value)
+					}
 					error={fieldState.invalid}
 					helperText={fieldState.error?.message}
 					slotProps={{
