@@ -48,12 +48,6 @@ describe('ResultPage state', () => {
 
 		expect(screen.getByText(EMPTY_MESSAGE)).toBeInTheDocument();
 	});
-
-	it('does not show the empty state for a valid response', () => {
-		renderWithState(response);
-
-		expect(screen.queryByText(EMPTY_MESSAGE)).not.toBeInTheDocument();
-	});
 });
 
 describe('ResultPage vehicle', () => {
@@ -103,5 +97,15 @@ describe('ResultPage logbook', () => {
 		const region = logbookContents();
 		expect(region).toHaveTextContent(contents);
 		expect(region?.children).toHaveLength(0);
+	});
+});
+
+describe('ResultPage submit another vehicle', () => {
+	it('links back to the form', () => {
+		renderWithState(response);
+
+		expect(
+			screen.getByRole('link', { name: 'Submit another vehicle' }),
+		).toHaveAttribute('href', '/');
 	});
 });

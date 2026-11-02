@@ -1,4 +1,5 @@
 import { formatMake, uploadResponseSchema } from '@autograb/shared';
+import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
@@ -57,6 +58,11 @@ function ResultPage() {
 							{result.data.logbook.contents}
 						</LogbookContents>
 					)}
+					<div>
+						<Button component={RouterLink} to="/" variant="contained">
+							Submit another vehicle
+						</Button>
+					</div>
 				</>
 			) : (
 				<Typography>
