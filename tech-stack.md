@@ -13,16 +13,16 @@ The technologies used in this project and why each was chosen. Versions are the 
 
 ## Client
 
-| Choice                                                             | Version | Why                                                                                                                                                  |
-| ------------------------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| React                                                              | 19.x    | Required by the brief                                                                                                                                |
-| Vite                                                               | 8.x     | Fast dev server and build; proxies `/api` to the server during development                                                                           |
-| Material UI (`@mui/material`, `@emotion/react`, `@emotion/styled`) | 9.x     | Ready-made, accessible form components. Starts with the default theme; an AutoGrab-inspired theme comes later. Emotion is a required peer dependency |
-| `@mui/icons-material`                                              | 9.x     | Icons for the System / Light / Dark theme switcher                                                                                                   |
-| React Router (`react-router`)                                      | 8.x     | Routes `/` (form) and `/upload` (result), and passes the result between them. Declarative mode only                                                  |
-| React Hook Form (`react-hook-form`)                                | 7.x     | Form state, validation timing, submitting state and mapping server errors onto fields. MUI inputs are wired with `Controller`                        |
-| `@hookform/resolvers`                                              | 7.x     | Connects the shared Zod schema to React Hook Form (`zodResolver`)                                                                                    |
-| Axios                                                              | 1.x     | Posts the multipart `FormData`; parses JSON replies and tells server errors apart from network failures (`isAxiosError`)                             |
+| Choice                                                             | Version | Why                                                                                                                                                             |
+| ------------------------------------------------------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| React                                                              | 19.x    | Required by the brief                                                                                                                                           |
+| Vite                                                               | 8.x     | Fast dev server and build; proxies `/api` to the server during development                                                                                      |
+| Material UI (`@mui/material`, `@emotion/react`, `@emotion/styled`) | 9.x     | Ready-made, accessible form components, with an AutoGrab-inspired theme (`createTheme`) in light and dark colour schemes. Emotion is a required peer dependency |
+| `@mui/icons-material`                                              | 9.x     | Icons for the System / Light / Dark theme switcher                                                                                                              |
+| React Router (`react-router`)                                      | 8.x     | Routes `/` (form) and `/upload` (result), and passes the result between them. Declarative mode only                                                             |
+| React Hook Form (`react-hook-form`)                                | 7.x     | Form state, validation timing, submitting state and mapping server errors onto fields. MUI inputs are wired with `Controller`                                   |
+| `@hookform/resolvers`                                              | 7.x     | Connects the shared Zod schema to React Hook Form (`zodResolver`)                                                                                               |
+| Axios                                                              | 1.x     | Posts the multipart `FormData`; parses JSON replies and tells server errors apart from network failures (`isAxiosError`)                                        |
 
 ## Server
 
@@ -41,14 +41,12 @@ The technologies used in this project and why each was chosen. Versions are the 
 | Zod 4.x                       | One schema validates the selection on both client and server, so both give identical messages. API request/response types are inferred from the schemas (`z.infer`) rather than written twice |
 | Consumed as TypeScript source | Vite and tsx both handle `.ts` directly, so the package needs no build step                                                                                                                   |
 
-## Planned for Later (Theme & Branding)
+## Theme & Branding
 
-Not installed in the initial build. An AutoGrab-inspired theme (colours, fonts and logo) is planned once the core app is complete.
-
-| Choice                                                   | Version | Why                                                                   |
-| -------------------------------------------------------- | ------- | --------------------------------------------------------------------- |
-| MUI `createTheme`                                        | 9.x     | One theme file for AutoGrab-inspired colours, fonts and corner radius |
-| `@fontsource/plus-jakarta-sans`, `@fontsource/unbounded` | 5.x     | Self-hosted fonts matching AutoGrab's site; no Google Fonts request   |
+| Choice                         | Why                                                                                                                      |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| MUI `createTheme` (`theme.ts`) | One file for AutoGrab-inspired colours, fonts and corner radius, with System / Light / Dark modes through `colorSchemes` |
+| System font stacks             | A system UI stack for body text and a Verdana stack for headings. No font packages or Google Fonts requests              |
 
 ## Testing & Code Quality
 

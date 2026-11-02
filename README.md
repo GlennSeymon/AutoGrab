@@ -25,17 +25,53 @@ Then open http://localhost:5173.
 
 A sample logbook is provided at [samples/logbook.txt](samples/logbook.txt).
 
+## Configuration
+
+No configuration is needed to run the app. To change the server port, copy [.env.example](.env.example) to `.env` at the repository root and edit it:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Default | Used by                                                    |
+| -------- | ------- | ---------------------------------------------------------- |
+| `PORT`   | `3001`  | The server's port, and the target of the Vite `/api` proxy |
+
+An invalid `PORT` stops the server at startup with a clear message.
+
 ## Scripts
 
 Run from the repository root:
 
-| Command          | Description                           |
-| ---------------- | ------------------------------------- |
-| `npm run dev`    | Start client and server in watch mode |
-| `npm run build`  | Type-check and build all workspaces   |
-| `npm run lint`   | Lint all workspaces                   |
-| `npm run format` | Format the repo with Prettier         |
-| `npm test`       | Run client, server and shared tests   |
+| Command                | Description                             |
+| ---------------------- | --------------------------------------- |
+| `npm run dev`          | Start client and server in watch mode   |
+| `npm run build`        | Type-check and build all workspaces     |
+| `npm run lint`         | Lint all workspaces                     |
+| `npm run format`       | Format the repo with Prettier           |
+| `npm run format:check` | Check formatting without changing files |
+| `npm test`             | Run client, server and shared tests     |
+
+To run one workspace's tests, use `npm test -w client` (or `-w server`, `-w shared`).
+
+## Testing
+
+`npm test` runs every workspace's tests with [Vitest](https://vitest.dev). Tests were written alongside each feature rather than afterwards.
+
+| Workspace | Tool                                       | What's covered                                                                                                                                                                                                                                                                   |
+| --------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `shared/` | Vitest (unit)                              | Lookup helpers, `formatMake`, the selection schema (valid path, missing fields, a badge from another model), the API contract schemas, and that every quick-select preset is valid                                                                                               |
+| `server/` | Vitest + Supertest (Express app in memory) | `POST /api/upload` success with and without a logbook; 400 for missing or invalid selections, empty files and wrong field names; 413 for oversized files; 415 for binary files; JSON 404 for unknown routes; `PORT` parsing; logbook decoding (BOM, CRLF)                        |
+| `client/` | React Testing Library + user-event (jsdom) | Field visibility and reset rules, quick-select and Clear, logbook select/remove/size errors, disabled state while submitting, server field errors and network errors, the result page (including HTML shown as text), routing, and the API client against a mocked Axios adapter |
+
+One full-flow test (`client/src/App.test.tsx`) selects a vehicle, attaches a logbook, submits through the real API client to a mocked Axios adapter, and checks the result page.
+
+**Left out on purpose:**
+
+- **Browser end-to-end tests (Playwright/Cypress).** The full flow is covered by the RTL test above and was checked by hand in a real browser, including odd files, a stopped server and a 320px screen. Playwright is listed in [future-improvements.md](future-improvements.md).
+- **Snapshot tests.** They break on harmless markup changes and don't show what behaviour is expected.
+- **Coverage thresholds.** Tests target real behaviour rather than a percentage.
+- **Tests of MUI or React Hook Form internals.** Those libraries are tested by their authors. Tests only check how this app uses them.
 
 ## Using the form
 
@@ -123,7 +159,7 @@ The server is a JSON API, and all its routes are under `/api`. Page routes such 
 ```json
 {
   "error": {
-    "message": "Badge 'XR8' is not available for Ford Falcon Ute",
+    "message": "Select a valid badge for this model",
     "field": "badge"
   }
 }
