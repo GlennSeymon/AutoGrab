@@ -1,17 +1,20 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import QuickSelectButtons from '../components/QuickSelectButtons.tsx';
 import SelectField from '../components/SelectField.tsx';
 import { useVehicleForm } from '../form/useVehicleForm.ts';
 
 function FormPage() {
 	const {
 		form,
+		selection,
 		makeOptions,
 		modelOptions,
 		badgeOptions,
 		showModel,
 		showBadge,
 		selectField,
+		quickSelect,
 	} = useVehicleForm();
 
 	return (
@@ -19,6 +22,7 @@ function FormPage() {
 			<Typography variant="h5" component="h2">
 				Select a vehicle
 			</Typography>
+			<QuickSelectButtons selection={selection} onSelect={quickSelect} />
 			<SelectField
 				control={form.control}
 				name="make"

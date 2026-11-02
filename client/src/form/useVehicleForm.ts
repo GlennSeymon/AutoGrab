@@ -49,6 +49,7 @@ export function useVehicleForm() {
 
 	return {
 		form,
+		selection: { make, model, badge },
 		makeOptions: toOptions(getMakes(), formatMake),
 		modelOptions: toOptions(getModels(make)),
 		badgeOptions: toOptions(getBadges(make, model)),

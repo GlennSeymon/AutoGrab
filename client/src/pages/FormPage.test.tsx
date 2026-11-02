@@ -71,3 +71,54 @@ describe('FormPage vehicle selection', () => {
 		expect(field('Badge')).not.toBeInTheDocument();
 	});
 });
+
+describe('FormPage quick select', () => {
+	function preset(name: string) {
+		return screen.getByRole('button', { name });
+	}
+
+	it('fills all three fields and highlights only the chosen preset', async () => {
+		await user.click(preset('BMW 130d xDrive 26d'));
+
+		expect(field('Make')).toHaveTextContent('Bmw');
+		expect(field('Model')).toHaveTextContent('130d');
+		expect(field('Badge')).toHaveTextContent('xDrive 26d');
+		expect(preset('BMW 130d xDrive 26d')).toHaveAttribute(
+			'aria-pressed',
+			'true',
+		);
+		expect(preset('Tesla Model 3 Performance')).toHaveAttribute(
+			'aria-pressed',
+			'false',
+		);
+	});
+
+	it('highlights the preset matching a manual selection', async () => {
+		await choose('Make', 'Tesla');
+		await choose('Model', 'Model 3');
+		expect(preset('Tesla Model 3 Performance')).toHaveAttribute(
+			'aria-pressed',
+			'false',
+		);
+
+		await choose('Badge', 'Performance');
+
+		expect(preset('Tesla Model 3 Performance')).toHaveAttribute(
+			'aria-pressed',
+			'true',
+		);
+	});
+
+	it('ends in the same state as a manual selection', async () => {
+		await user.click(preset('Tesla Model 3 Performance'));
+		await choose('Model', 'Select a model…');
+
+		expect(field('Make')).toHaveTextContent('Tesla');
+		expect(field('Model')).toHaveTextContent('Select a model…');
+		expect(field('Badge')).not.toBeInTheDocument();
+		expect(preset('Tesla Model 3 Performance')).toHaveAttribute(
+			'aria-pressed',
+			'false',
+		);
+	});
+});
