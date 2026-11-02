@@ -1,7 +1,7 @@
+import { HttpStatus } from '@autograb/shared';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { createApp } from './app.ts';
-import { HttpStatus } from './httpStatus.ts';
 
 describe('GET /api/health', () => {
 	it('responds with ok', async () => {

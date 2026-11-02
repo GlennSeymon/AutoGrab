@@ -1,8 +1,7 @@
-import { LOGBOOK_MAX_BYTES, UPLOAD_PATH } from '@autograb/shared';
+import { HttpStatus, LOGBOOK_MAX_BYTES, UPLOAD_PATH } from '@autograb/shared';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { createApp } from './app.ts';
-import { HttpStatus } from './httpStatus.ts';
 
 describe(`POST ${UPLOAD_PATH} validation`, () => {
 	it('rejects a request with no form fields', async () => {

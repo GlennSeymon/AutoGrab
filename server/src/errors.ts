@@ -1,7 +1,11 @@
-import { type ApiError, LOGBOOK_FIELD, UPLOAD_FIELDS } from '@autograb/shared';
+import {
+	type ApiError,
+	HttpStatus,
+	LOGBOOK_FIELD,
+	UPLOAD_FIELDS,
+} from '@autograb/shared';
 import type { NextFunction, Request, Response } from 'express';
 import { MulterError } from 'multer';
-import { HttpStatus } from './httpStatus.ts';
 
 function multerErrorBody(error: MulterError): ApiError {
 	const field = UPLOAD_FIELDS.find((name) => name === error.field);

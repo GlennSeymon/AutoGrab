@@ -1,9 +1,19 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { BrowserRouter } from 'react-router';
 import App from './App.tsx';
+
+const theme = createTheme();
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<App />
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</ThemeProvider>
 	</StrictMode>,
 );

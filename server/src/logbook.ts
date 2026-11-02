@@ -1,9 +1,9 @@
 import {
 	type ApiError,
+	HttpStatus,
 	LOGBOOK_FIELD,
 	type LogbookResult,
 } from '@autograb/shared';
-import { HttpStatus } from './httpStatus.ts';
 
 export type LogbookFile = Pick<Express.Multer.File, 'originalname' | 'buffer'>;
 

@@ -1,6 +1,6 @@
+import { HttpStatus } from '@autograb/shared';
 import { describe, expect, it } from 'vitest';
 import { readLogbook } from './logbook.ts';
-import { HttpStatus } from './httpStatus.ts';
 
 function fileWith(contents: Buffer | string) {
 	return { originalname: 'logbook.txt', buffer: Buffer.from(contents) };

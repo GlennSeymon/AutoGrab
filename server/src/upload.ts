@@ -1,5 +1,6 @@
 import {
 	type ApiError,
+	HttpStatus,
 	LOGBOOK_FIELD,
 	LOGBOOK_MAX_BYTES,
 	UPLOAD_FIELDS,
@@ -10,7 +11,6 @@ import {
 import type { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import { readLogbook } from './logbook.ts';
-import { HttpStatus } from './httpStatus.ts';
 
 export interface UploadLocals {
 	selection: VehicleSelection;
