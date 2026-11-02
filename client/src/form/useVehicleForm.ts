@@ -35,7 +35,7 @@ export function useVehicleForm() {
 		mode: 'onChange',
 		defaultValues: EMPTY_FORM_VALUES,
 	});
-	const { control, getValues, reset } = form;
+	const { control, getValues, reset, setValue } = form;
 	const [make, model, badge] = useWatch({
 		control,
 		name: ['make', 'model', 'badge'],
@@ -66,5 +66,9 @@ export function useVehicleForm() {
 		quickSelect: (selection: VehicleSelection) =>
 			resetTo({ ...EMPTY_FORM_VALUES, ...selection }),
 		clear: () => resetTo(EMPTY_FORM_VALUES),
+		removeLogbook: () => {
+			setValue('logbook', undefined, { shouldValidate: true });
+			setLogbookInputKey((key) => key + 1);
+		},
 	};
 }
