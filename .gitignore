@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+
+# Build output (client, server and shared workspaces)
+dist
+dist-ssr
+build
+*.tsbuildinfo
+*.local
+
+# Test output
+coverage
+
+# Environment variables (commit .env.example only)
+.env
+.env.*
+!.env.example
+
+# Client brief PDF (the .md version is committed)
+AutoGrab-VehicleSelectionForm.pdf
+
+# Local planning documents (not published)
+project-scope.md
+implementation-plan.md
+
+# Windows download metadata (e.g. files copied into WSL)
+*:Zone.Identifier
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
