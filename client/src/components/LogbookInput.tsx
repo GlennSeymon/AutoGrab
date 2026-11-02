@@ -1,7 +1,9 @@
 import Button from '@mui/material/Button';
+import FormHelperText from '@mui/material/FormHelperText';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { useId } from 'react';
 import {
 	type Control,
 	Controller,
@@ -39,44 +41,55 @@ function LogbookInput<TFieldValues extends FieldValues, TTransformedValues>({
 	inputKey,
 	onRemove,
 }: LogbookInputProps<TFieldValues, TTransformedValues>) {
+	const errorId = useId();
+
 	return (
 		<Controller
 			control={control}
 			name={name}
-			render={({ field }) => {
+			render={({ field, fieldState }) => {
 				const file: unknown = field.value;
 				return (
-					<Stack
-						direction="row"
-						spacing={2}
-						useFlexGap
-						sx={{ alignItems: 'center', flexWrap: 'wrap' }}
-					>
-						<Button component="label" variant="outlined">
-							{label}
-							<HiddenFileInput
-								key={inputKey}
-								type="file"
-								accept=".txt,text/plain"
-								name={field.name}
-								ref={field.ref}
-								onBlur={field.onBlur}
-								onChange={(event) => field.onChange(event.target.files?.[0])}
-							/>
-						</Button>
-						{file instanceof File && (
-							<>
-								<Typography sx={{ overflowWrap: 'anywhere' }}>
-									{file.name}
-								</Typography>
-								<Button
-									variant="text"
-									aria-label={`Remove ${file.name}`}
-									onClick={onRemove}
-								>
-									Remove
-								</Button>
-							</>
+					<Stack spacing={1}>
+						<Stack
+							direction="row"
+							spacing={2}
+							useFlexGap
+							sx={{ alignItems: 'center', flexWrap: 'wrap' }}
+						>
+							<Button component="label" variant="outlined">
+								{label}
+								<HiddenFileInput
+									key={inputKey}
+									type="file"
+									accept=".txt,text/plain"
+									name={field.name}
+									ref={field.ref}
+									onBlur={field.onBlur}
+									aria-invalid={fieldState.invalid}
+									aria-describedby={fieldState.error ? errorId : undefined}
+									onChange={(event) => field.onChange(event.target.files?.[0])}
+								/>
+							</Button>
+							{file instanceof File && (
+								<>
+									<Typography sx={{ overflowWrap: 'anywhere' }}>
+										{file.name}
+									</Typography>
+									<Button
+										variant="text"
+										aria-label={`Remove ${file.name}`}
+										onClick={onRemove}
+									>
+										Remove
+									</Button>
+								</>
+							)}
+						</Stack>
+						{fieldState.error && (
+							<FormHelperText id={errorId} error>
+								{fieldState.error.message}
+							</FormHelperText>
 						)}
 					</Stack>
 				);
