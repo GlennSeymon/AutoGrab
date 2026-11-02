@@ -19,6 +19,7 @@ These depend on each other: a database makes it possible to manage the vehicle d
 - **Better upload experience.** Drag-and-drop, a progress bar for slow connections, and a preview of the file before submitting.
 - **Searchable dropdowns.** An autocomplete for Make and Model once the vehicle list grows beyond a handful of entries.
 - **Accessibility pass.** A keyboard-only run through the whole flow, a screen-reader check of labels, errors, the submitting state and the result page, and a colour-contrast check against WCAG AA. MUI's components already give a reasonable baseline (labelled inputs, errors shown in an `Alert` with `role="alert"`), but this hasn't been audited.
+- **Cancelling and timing out the upload.** Not needed today: there is one request, started only by Submit, every input is disabled while it runs, and it goes to a local server. Two edge cases remain. If the user presses the browser's Back button mid-submit, the late reply still navigates to `/upload`, and a server that never replies leaves the spinner running until Node's 5-minute request timeout. An `AbortController` passed to Axios as `signal` and aborted when the form unmounts would fix the first, and a client timeout of about 30 seconds would fix the second by showing the existing "can't reach the server" message.
 
 ## Production readiness
 
