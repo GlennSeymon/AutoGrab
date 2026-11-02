@@ -1,0 +1,7 @@
+# Prettier also skips everything in .gitignore
+
+package-lock.json
+
+# Supplied brief and sample data are kept exactly as provided
+AutoGrab-VehicleSelectionForm.md
+samples/

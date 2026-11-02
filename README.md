@@ -18,10 +18,10 @@ Then open http://localhost:5173.
 
 `npm run dev` starts both apps:
 
-| App    | URL                   | Notes                                       |
-| ------ | --------------------- | ------------------------------------------- |
+| App    | URL                   | Notes                                         |
+| ------ | --------------------- | --------------------------------------------- |
 | Client | http://localhost:5173 | Vite dev server; proxies `/api` to the server |
-| Server | http://localhost:3001 | Express API; port configurable via `PORT`    |
+| Server | http://localhost:3001 | Express API; port configurable via `PORT`     |
 
 A sample logbook is provided at [samples/logbook.txt](samples/logbook.txt).
 
@@ -29,13 +29,13 @@ A sample logbook is provided at [samples/logbook.txt](samples/logbook.txt).
 
 Run from the repository root:
 
-| Command          | Description                            |
-| ---------------- | -------------------------------------- |
-| `npm run dev`    | Start client and server in watch mode  |
-| `npm run build`  | Type-check and build all workspaces    |
-| `npm run lint`   | Lint all workspaces                    |
-| `npm run format` | Format the repo with Prettier          |
-| `npm test`       | Run client, server and shared tests    |
+| Command          | Description                           |
+| ---------------- | ------------------------------------- |
+| `npm run dev`    | Start client and server in watch mode |
+| `npm run build`  | Type-check and build all workspaces   |
+| `npm run lint`   | Lint all workspaces                   |
+| `npm run format` | Format the repo with Prettier         |
+| `npm test`       | Run client, server and shared tests   |
 
 ## Using the form
 
@@ -47,9 +47,9 @@ Run from the repository root:
 
 Changing a Make or Model clears the fields below it. The **quick-select** buttons (Tesla Model 3 Performance, BMW 130d xDrive 26d) fill in all three fields at once, and **Clear** resets the form.
 
-| Page      | Shows                                               |
-| --------- | --------------------------------------------------- |
-| `/`       | The vehicle selection form                          |
+| Page      | Shows                                              |
+| --------- | -------------------------------------------------- |
+| `/`       | The vehicle selection form                         |
 | `/upload` | The submitted selections and logbook contents only |
 
 ## Project structure
@@ -65,10 +65,10 @@ The vehicle data lives once, in `shared/`, and is imported by both the client (t
 
 ## Project documents
 
-| Document                                                             | Contents                                                       |
-| -------------------------------------------------------------------- | -------------------------------------------------------------- |
-| [AutoGrab-VehicleSelectionForm.md](AutoGrab-VehicleSelectionForm.md) | The original challenge brief                                   |
-| [tech-stack.md](tech-stack.md)                                       | Libraries used and why, plus what was deliberately left out    |
+| Document                                                             | Contents                                                    |
+| -------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [AutoGrab-VehicleSelectionForm.md](AutoGrab-VehicleSelectionForm.md) | The original challenge brief                                |
+| [tech-stack.md](tech-stack.md)                                       | Libraries used and why, plus what was deliberately left out |
 
 ## API
 
@@ -92,7 +92,10 @@ The server is a JSON API, and all its routes are under `/api`. Page routes such 
   "make": "tesla",
   "model": "Model 3",
   "badge": "Performance",
-  "logbook": { "filename": "logbook.txt", "contents": "2020/05/01: Initial Service\n..." }
+  "logbook": {
+    "filename": "logbook.txt",
+    "contents": "2020/05/01: Initial Service\n..."
+  }
 }
 ```
 
@@ -101,7 +104,12 @@ The server is a JSON API, and all its routes are under `/api`. Page routes such 
 **Errors**
 
 ```json
-{ "error": { "message": "Badge 'XR8' is not available for Ford Falcon Ute", "field": "badge" } }
+{
+  "error": {
+    "message": "Badge 'XR8' is not available for Ford Falcon Ute",
+    "field": "badge"
+  }
+}
 ```
 
 | Status | Meaning                                                    |

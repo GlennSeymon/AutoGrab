@@ -1,0 +1,10 @@
+{
+  "useTabs": true,
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": ["*.md", "*.json", "*.yml", "*.yaml"],
+      "options": { "useTabs": false }
+    }
+  ]
+}
