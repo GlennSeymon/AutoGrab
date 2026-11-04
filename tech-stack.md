@@ -75,5 +75,4 @@ The technologies used in this project and why each was chosen. Versions are the 
 ## Known Risks
 
 - **TypeScript 7:** before upgrading, confirm typescript-eslint supports it.
-- **`zodResolver` types:** let `useForm` infer its types from the resolver (or pass input, context and output generics). A single `useForm<T>` generic conflicts with Zod schemas whose input and output types differ.
-- **Shared TypeScript source with no build step:** works with Vite and tsx. If the server ever needs compiling with `tsc`, `shared/` will need its own build step or TypeScript project references.
+- **Shared TypeScript source with no build step:** works with Vite and tsx. If the server is ever compiled to JavaScript instead of run with tsx, `shared/` will need its own build step or TypeScript project references.
