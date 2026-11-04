@@ -3,7 +3,7 @@ import {
 	HttpStatus,
 	LOGBOOK_FIELD,
 	LOGBOOK_MAX_BYTES,
-	UPLOAD_FIELDS,
+	toUploadField,
 	type UploadResponse,
 	type VehicleSelection,
 	vehicleSelectionSchema,
@@ -12,7 +12,7 @@ import type { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import { readLogbook } from './logbook.ts';
 
-export interface UploadLocals {
+interface UploadLocals {
 	selection: VehicleSelection;
 }
 
@@ -33,7 +33,7 @@ export function validateSelection(
 		res.status(HttpStatus.BAD_REQUEST).json({
 			error: {
 				message: issue.message,
-				field: UPLOAD_FIELDS.find((field) => field === issue.path[0]),
+				field: toUploadField(issue.path[0]),
 			},
 		});
 		return;

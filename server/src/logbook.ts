@@ -1,16 +1,17 @@
 import {
 	type ApiError,
 	HttpStatus,
+	LOGBOOK_EMPTY_MESSAGE,
 	LOGBOOK_FIELD,
 	type LogbookResult,
 } from '@autograb/shared';
 
-export type LogbookFile = Pick<Express.Multer.File, 'originalname' | 'buffer'>;
+type LogbookFile = Pick<Express.Multer.File, 'originalname' | 'buffer'>;
 
 type FailureStatus =
 	typeof HttpStatus.BAD_REQUEST | typeof HttpStatus.UNSUPPORTED_MEDIA_TYPE;
 
-export type ReadLogbookResult =
+type ReadLogbookResult =
 	| { ok: true; logbook: LogbookResult }
 	| { ok: false; status: FailureStatus; error: ApiError };
 
@@ -34,7 +35,7 @@ function decode(buffer: Buffer) {
 
 export function readLogbook(file: LogbookFile): ReadLogbookResult {
 	if (file.buffer.length === 0) {
-		return failure(HttpStatus.BAD_REQUEST, 'The logbook file is empty');
+		return failure(HttpStatus.BAD_REQUEST, LOGBOOK_EMPTY_MESSAGE);
 	}
 	const text = decode(file.buffer);
 	if (text === null || text.includes('\0')) {

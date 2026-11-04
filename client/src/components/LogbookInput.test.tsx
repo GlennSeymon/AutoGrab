@@ -1,12 +1,13 @@
-import { LOGBOOK_MAX_BYTES, QUICK_SELECT_VEHICLES } from '@autograb/shared';
+import {
+	LOGBOOK_EMPTY_MESSAGE,
+	LOGBOOK_MAX_BYTES,
+	LOGBOOK_TOO_LARGE_MESSAGE,
+	QUICK_SELECT_VEHICLES,
+} from '@autograb/shared';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useVehicleForm } from '../form/useVehicleForm.ts';
-import {
-	LOGBOOK_EMPTY_MESSAGE,
-	LOGBOOK_TOO_LARGE_MESSAGE,
-} from '../form/vehicleForm.ts';
 import LogbookInput from './LogbookInput.tsx';
 
 const LOGBOOK = new File(['2020/05/01: Initial Service'], 'logbook.txt', {

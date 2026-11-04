@@ -1,8 +1,7 @@
-import { LOGBOOK_MAX_BYTES } from '@autograb/shared';
+import { LOGBOOK_MAX_BYTES, LOGBOOK_TOO_LARGE_MESSAGE } from '@autograb/shared';
 import { describe, expect, it } from 'vitest';
 import {
 	EMPTY_FORM_VALUES,
-	LOGBOOK_TOO_LARGE_MESSAGE,
 	nextFormValues,
 	vehicleFormSchema,
 	type VehicleFormValues,

@@ -2,15 +2,16 @@ import {
 	type ApiError,
 	HttpStatus,
 	LOGBOOK_FIELD,
-	UPLOAD_FIELDS,
+	LOGBOOK_TOO_LARGE_MESSAGE,
+	toUploadField,
 } from '@autograb/shared';
 import type { NextFunction, Request, Response } from 'express';
 import { MulterError } from 'multer';
 
 function multerErrorBody(error: MulterError): ApiError {
-	const field = UPLOAD_FIELDS.find((name) => name === error.field);
+	const field = toUploadField(error.field);
 	if (error.code === 'LIMIT_FILE_SIZE') {
-		return { error: { message: 'The logbook must be 1 MB or smaller', field } };
+		return { error: { message: LOGBOOK_TOO_LARGE_MESSAGE, field } };
 	}
 	if (error.code === 'LIMIT_UNEXPECTED_FILE') {
 		return {

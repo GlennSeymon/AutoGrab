@@ -1,8 +1,10 @@
-import { LOGBOOK_MAX_BYTES, vehicleSelectionSchema } from '@autograb/shared';
+import {
+	LOGBOOK_EMPTY_MESSAGE,
+	LOGBOOK_MAX_BYTES,
+	LOGBOOK_TOO_LARGE_MESSAGE,
+	vehicleSelectionSchema,
+} from '@autograb/shared';
 import { z } from 'zod';
-
-export const LOGBOOK_EMPTY_MESSAGE = 'The logbook file is empty';
-export const LOGBOOK_TOO_LARGE_MESSAGE = 'The logbook must be 1 MB or smaller';
 
 export const vehicleFormSchema = vehicleSelectionSchema.safeExtend({
 	logbook: z

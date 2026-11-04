@@ -1,4 +1,9 @@
-import { HttpStatus, LOGBOOK_MAX_BYTES, UPLOAD_PATH } from '@autograb/shared';
+import {
+	HttpStatus,
+	LOGBOOK_MAX_BYTES,
+	LOGBOOK_TOO_LARGE_MESSAGE,
+	UPLOAD_PATH,
+} from '@autograb/shared';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { createApp } from './app.ts';
@@ -96,7 +101,7 @@ describe(`POST ${UPLOAD_PATH} upload errors`, () => {
 		expect(response.type).toBe('application/json');
 		expect(response.body).toEqual({
 			error: {
-				message: 'The logbook must be 1 MB or smaller',
+				message: LOGBOOK_TOO_LARGE_MESSAGE,
 				field: 'logbook',
 			},
 		});

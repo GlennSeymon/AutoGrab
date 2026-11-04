@@ -42,9 +42,13 @@ export function useVehicleForm() {
 	});
 	const [logbookInputKey, setLogbookInputKey] = useState(0);
 
+	function resetLogbookInput() {
+		setLogbookInputKey((key) => key + 1);
+	}
+
 	function resetTo(values: VehicleFormValues) {
 		reset(values);
-		setLogbookInputKey((key) => key + 1);
+		resetLogbookInput();
 	}
 
 	return {
@@ -68,7 +72,7 @@ export function useVehicleForm() {
 		clear: () => resetTo(EMPTY_FORM_VALUES),
 		removeLogbook: () => {
 			setValue('logbook', undefined, { shouldValidate: true });
-			setLogbookInputKey((key) => key + 1);
+			resetLogbookInput();
 		},
 	};
 }

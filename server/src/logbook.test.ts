@@ -1,4 +1,4 @@
-import { HttpStatus } from '@autograb/shared';
+import { HttpStatus, LOGBOOK_EMPTY_MESSAGE } from '@autograb/shared';
 import { describe, expect, it } from 'vitest';
 import { readLogbook } from './logbook.ts';
 
@@ -28,7 +28,7 @@ describe('readLogbook', () => {
 			ok: false,
 			status: HttpStatus.BAD_REQUEST,
 			error: {
-				error: { message: 'The logbook file is empty', field: 'logbook' },
+				error: { message: LOGBOOK_EMPTY_MESSAGE, field: 'logbook' },
 			},
 		});
 	});
