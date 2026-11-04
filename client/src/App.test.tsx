@@ -22,24 +22,6 @@ function renderAt(path: string) {
 }
 
 describe('App routes', () => {
-	it('renders the form page at /', () => {
-		renderAt('/');
-
-		expect(
-			screen.getByRole('heading', { name: 'Select a vehicle' }),
-		).toBeInTheDocument();
-		expect(screen.getByRole('img', { name: 'AutoGrab' })).toBeInTheDocument();
-	});
-
-	it('renders the result page at /upload', () => {
-		renderAt('/upload');
-
-		expect(
-			screen.getByRole('heading', { name: 'Upload result' }),
-		).toBeInTheDocument();
-		expect(screen.getByRole('img', { name: 'AutoGrab' })).toBeInTheDocument();
-	});
-
 	it('redirects unknown URLs to the form page', () => {
 		renderAt('/nope');
 
@@ -61,6 +43,7 @@ describe('App full flow', () => {
 		};
 		mock.onPost(UPLOAD_PATH).reply(HttpStatus.OK, response);
 		renderAt('/');
+		expect(screen.getByRole('img', { name: 'AutoGrab' })).toBeInTheDocument();
 
 		async function choose(label: string, option: string) {
 			await user.click(screen.getByRole('combobox', { name: label }));

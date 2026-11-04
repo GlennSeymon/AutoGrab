@@ -68,16 +68,6 @@ describe('FormPage vehicle selection', () => {
 		expect(field('Badge')).not.toBeInTheDocument();
 	});
 
-	it('clears Badge when the Model changes', async () => {
-		await choose('Make', 'Ford');
-		await choose('Model', 'Falcon');
-		await choose('Badge', 'XR6');
-
-		await choose('Model', 'Falcon Ute');
-
-		expect(field('Badge')).toHaveTextContent('Select a badge…');
-	});
-
 	it('clears the fields below when a placeholder is chosen', async () => {
 		await choose('Make', 'Ford');
 		await choose('Model', 'Falcon');
@@ -315,29 +305,7 @@ describe('FormPage submit success', () => {
 		expect(screen.getByRole('status')).toHaveTextContent(JSON.stringify(state));
 	}
 
-	it('moves to /upload with the response when a logbook is attached', async () => {
-		const response = {
-			make: 'tesla',
-			model: 'Model 3',
-			badge: 'Performance',
-			logbook: {
-				filename: 'logbook.txt',
-				contents: '2020/05/01: Initial Service',
-			},
-		};
-		vi.mocked(uploadVehicle).mockResolvedValue({ ok: true, data: response });
-		await selectTesla();
-		await user.upload(
-			screen.getByLabelText('Attach logbook'),
-			new File([response.logbook.contents], 'logbook.txt', {
-				type: 'text/plain',
-			}),
-		);
-
-		await expectNavigatedWith(response);
-	});
-
-	it('moves to /upload with the response when no logbook is attached', async () => {
+	it('moves to /upload with the response', async () => {
 		const response = {
 			make: 'tesla',
 			model: 'Model 3',

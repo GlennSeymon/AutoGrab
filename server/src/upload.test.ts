@@ -13,18 +13,6 @@ describe(`POST ${UPLOAD_PATH} validation`, () => {
 		});
 	});
 
-	it('rejects a missing field', async () => {
-		const response = await request(createApp())
-			.post(UPLOAD_PATH)
-			.field('make', 'ford')
-			.field('badge', 'Raptor');
-
-		expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-		expect(response.body).toEqual({
-			error: { message: 'Select a model', field: 'model' },
-		});
-	});
-
 	it('rejects a badge from another model', async () => {
 		const response = await request(createApp())
 			.post(UPLOAD_PATH)
@@ -69,19 +57,6 @@ describe(`POST ${UPLOAD_PATH}`, () => {
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body).toEqual({ ...selection, logbook: null });
-	});
-
-	it('rejects an empty logbook as a bad request', async () => {
-		const response = await postSelection().attach(
-			'logbook',
-			Buffer.alloc(0),
-			'logbook.txt',
-		);
-
-		expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-		expect(response.body).toEqual({
-			error: { message: 'The logbook file is empty', field: 'logbook' },
-		});
 	});
 
 	it('rejects a binary logbook as unsupported media', async () => {

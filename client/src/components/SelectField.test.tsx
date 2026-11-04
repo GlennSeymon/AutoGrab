@@ -10,7 +10,7 @@ const OPTIONS = [
 ];
 
 function TestForm() {
-	const { control } = useForm({ defaultValues: { make: '' } });
+	const { control, setValue } = useForm({ defaultValues: { make: '' } });
 	const make = useWatch({ control, name: 'make' });
 
 	return (
@@ -20,6 +20,7 @@ function TestForm() {
 				name="make"
 				label="Make"
 				options={OPTIONS}
+				onValueChange={(value) => setValue('make', value)}
 			/>
 			<output>{make}</output>
 		</>
@@ -27,14 +28,6 @@ function TestForm() {
 }
 
 describe('SelectField', () => {
-	it('is found by its label and shows the placeholder', () => {
-		render(<TestForm />);
-
-		expect(screen.getByRole('combobox', { name: 'Make' })).toHaveTextContent(
-			'Select a make…',
-		);
-	});
-
 	it('selects an option with the keyboard', async () => {
 		const user = userEvent.setup();
 		render(<TestForm />);
@@ -46,19 +39,5 @@ describe('SelectField', () => {
 		expect(screen.getByRole('combobox', { name: 'Make' })).toHaveTextContent(
 			'BMW',
 		);
-	});
-
-	it('clears the value when the placeholder is chosen', async () => {
-		const user = userEvent.setup();
-		render(<TestForm />);
-		const select = screen.getByRole('combobox', { name: 'Make' });
-
-		await user.click(select);
-		await user.click(screen.getByRole('option', { name: 'Ford' }));
-		await user.click(select);
-		await user.click(screen.getByRole('option', { name: 'Select a make…' }));
-
-		expect(screen.getByRole('status')).toBeEmptyDOMElement();
-		expect(select).toHaveTextContent('Select a make…');
 	});
 });

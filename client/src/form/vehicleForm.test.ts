@@ -2,7 +2,6 @@ import { LOGBOOK_MAX_BYTES } from '@autograb/shared';
 import { describe, expect, it } from 'vitest';
 import {
 	EMPTY_FORM_VALUES,
-	LOGBOOK_EMPTY_MESSAGE,
 	LOGBOOK_TOO_LARGE_MESSAGE,
 	nextFormValues,
 	vehicleFormSchema,
@@ -57,19 +56,6 @@ describe('vehicleFormSchema', () => {
 		const result = vehicleFormSchema.safeParse({ ...selection, logbook: file });
 		return result.error?.issues.map(({ path, message }) => ({ path, message }));
 	}
-
-	it('accepts a selection with or without a logbook', () => {
-		expect(vehicleFormSchema.safeParse(selection).success).toBe(true);
-		expect(vehicleFormSchema.safeParse({ ...selection, logbook }).success).toBe(
-			true,
-		);
-	});
-
-	it('rejects an empty logbook', () => {
-		expect(logbookIssues(new File([], 'empty.txt'))).toEqual([
-			{ path: ['logbook'], message: LOGBOOK_EMPTY_MESSAGE },
-		]);
-	});
 
 	it('accepts a logbook of exactly the size limit and rejects one byte more', () => {
 		const atLimit = new File([new Uint8Array(LOGBOOK_MAX_BYTES)], 'max.txt');

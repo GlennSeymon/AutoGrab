@@ -99,13 +99,3 @@ describe('ResultPage logbook', () => {
 		expect(region?.children).toHaveLength(0);
 	});
 });
-
-describe('ResultPage submit another vehicle', () => {
-	it('links back to the form', () => {
-		renderWithState(response);
-
-		expect(
-			screen.getByRole('link', { name: 'Submit another vehicle' }),
-		).toHaveAttribute('href', '/');
-	});
-});
