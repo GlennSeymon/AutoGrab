@@ -189,7 +189,7 @@ curl -F make=tesla -F model="Model 3" -F badge=Performance \
 
 ## Future improvements
 
-Work the brief doesn't ask for, such as a database for vehicle data and submissions, authentication, production deployment and an accessibility pass, is listed in [future-improvements.md](future-improvements.md).
+Work the brief doesn't ask for, such as an accessibility pass, a production build, CI and browser end-to-end tests, is listed in [future-improvements.md](future-improvements.md).
 
 ## License
 
